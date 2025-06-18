@@ -1,3 +1,4 @@
+import 'package:crew_match/utility/parth_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,6 +18,7 @@ class CrewMatch extends StatelessWidget {
           title: 'Crew Match',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
+            fontFamily: PathUtils.manropeFont,
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
             useMaterial3: true,
           ),

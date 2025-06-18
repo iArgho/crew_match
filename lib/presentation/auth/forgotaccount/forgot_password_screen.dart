@@ -49,7 +49,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               SizedBox(height: 16.h),
               Text(
                 'Forgot Your Password?',
-                style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 8.h),
               Text(
@@ -59,7 +59,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               SizedBox(height: 24.h),
               Text(
                 'Email',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
               ),
               SizedBox(height: 8.h),
               TextFormField(
@@ -84,7 +84,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               TextWidgetButton(
                 text: 'Get OTP',
                 onPressed: () {
-                  Get.off(() => OtpVerification());
+                  Get.off(() => OtpVerificationScreen());
                 },
               ),
             ],

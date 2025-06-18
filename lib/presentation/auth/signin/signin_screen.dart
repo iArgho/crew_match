@@ -61,7 +61,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     child: Text(
                       'Email',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         fontSize: 16.sp,
                       ),
                     ),
@@ -93,7 +93,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     child: Text(
                       'Password',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         fontSize: 16.sp,
                       ),
                     ),

@@ -29,3 +29,4 @@ flutter:
   assets:
     - assets/images/logo_bland.svg
     - assets/images/logo_Color.svg
+    - assets/fonts/Manrope.ttf

@@ -1,3 +1,4 @@
+import 'package:crew_match/presentation/auth/forgotaccount/reset_password_screen.dart';
 import 'package:crew_match/presentation/auth/signin/signin_screen.dart';
 import 'package:crew_match/presentation/widget/text_widget_button.dart';
 import 'package:flutter/material.dart';
@@ -5,14 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class OtpVerification extends StatefulWidget {
-  const OtpVerification({super.key});
+class OtpVerificationScreen extends StatefulWidget {
+  const OtpVerificationScreen({super.key});
 
   @override
-  State<OtpVerification> createState() => _OtpVerificationState();
+  State<OtpVerificationScreen> createState() => _OtpVerificationState();
 }
 
-class _OtpVerificationState extends State<OtpVerification> {
+class _OtpVerificationState extends State<OtpVerificationScreen> {
   final List<TextEditingController> _controllers = List.generate(
     6,
     (_) => TextEditingController(),
@@ -53,18 +54,17 @@ class _OtpVerificationState extends State<OtpVerification> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 16.h),
             Text(
-              "Please Enter the 6-digit verification code sent to",
-              style: TextStyle(fontSize: 16.sp),
+              'OTP Verification',
+              style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w600),
             ),
-            SizedBox(height: 4.h),
             Text(
-              "example@gmail.com",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
+              "Please Enter the 6-digit verification code sent to example@gmail.com",
+              style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
             ),
             SizedBox(height: 30.h),
 
-            // OTP input fields with underline only
             Wrap(
               alignment: WrapAlignment.start,
               spacing: 10.w,
@@ -96,10 +96,15 @@ class _OtpVerificationState extends State<OtpVerification> {
                 ),
               ],
             ),
+            SizedBox(height: 30.h),
+            TextWidgetButton(
+              text: 'Verify',
+              onPressed: () {
+                Get.off(() => const ResetPasswordScreen());
+              },
+            ),
 
-            const Spacer(),
-
-            TextWidgetButton(text: 'Sign In', onPressed: _handleSignIn),
+            Spacer(),
           ],
         ),
       ),
