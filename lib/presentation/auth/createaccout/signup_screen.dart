@@ -1,5 +1,5 @@
-import 'package:crew_match/presentation/auth/createaccout/signup_screen.dart';
 import 'package:crew_match/presentation/auth/forgotaccount/forgot_password_screen.dart';
+import 'package:crew_match/presentation/auth/signin/signin_screen.dart';
 import 'package:crew_match/presentation/widget/text_widget_button.dart';
 import 'package:crew_match/utility/parth_utils.dart';
 import 'package:flutter/material.dart';
@@ -7,65 +7,105 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-class SigninScreen extends StatefulWidget {
-  const SigninScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<SigninScreen> createState() => _SigninScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SigninScreenState extends State<SigninScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   bool rememberMe = false;
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
-  void _handleSignIn() {
+  void _handleSignUp() {
     if (_formKey.currentState!.validate()) {
+      final name = _nameController.text;
       final email = _emailController.text;
       final password = _passwordController.text;
-      print('Email: $email, Password: $password, Remember: $rememberMe');
+      print(
+        'Name: $name, Email: $email, Password: $password, Remember: $rememberMe',
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0.w),
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
         child: Center(
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Form(
               key: _formKey,
               child: Column(
                 children: [
+                  SizedBox(height: 80.h),
                   SvgPicture.asset(
                     PathUtils.logoColor,
                     width: 0.7.sw,
                     semanticsLabel: 'App Logo',
                   ),
-
-                  SizedBox(height: 32.h),
-
+                  SizedBox(height: 20.h),
+                  Text(
+                    "Create Account",
+                    style: TextStyle(
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    "Fill the information to create a new account.",
+                    style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                  ),
+                  SizedBox(height: 18.h),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Email', style: TextStyle(fontSize: 16.sp)),
+                    child: Text("Name", style: TextStyle(fontSize: 16.sp)),
+                  ),
+                  SizedBox(height: 8.h),
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your Name',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Enter your Name';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16.h),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Email", style: TextStyle(fontSize: 16.sp)),
                   ),
                   SizedBox(height: 8.h),
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    autofillHints: const [AutofillHints.email],
                     decoration: const InputDecoration(
                       hintText: 'Enter your Email',
                       border: OutlineInputBorder(),
@@ -80,18 +120,15 @@ class _SigninScreenState extends State<SigninScreen> {
                       return null;
                     },
                   ),
-
                   SizedBox(height: 16.h),
-
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Password', style: TextStyle(fontSize: 16.sp)),
+                    child: Text("Password", style: TextStyle(fontSize: 16.sp)),
                   ),
                   SizedBox(height: 8.h),
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
-                    autofillHints: const [AutofillHints.password],
                     decoration: InputDecoration(
                       hintText: 'Enter Password',
                       border: const OutlineInputBorder(),
@@ -101,11 +138,10 @@ class _SigninScreenState extends State<SigninScreen> {
                               ? Icons.visibility_off
                               : Icons.visibility,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
+                        onPressed:
+                            () => setState(
+                              () => _obscurePassword = !_obscurePassword,
+                            ),
                       ),
                     ),
                     validator: (text) {
@@ -118,9 +154,43 @@ class _SigninScreenState extends State<SigninScreen> {
                       return null;
                     },
                   ),
-
+                  SizedBox(height: 16.h),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Confirm Password",
+                      style: TextStyle(fontSize: 16.sp),
+                    ),
+                  ),
                   SizedBox(height: 8.h),
-
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    obscureText: _obscureConfirmPassword,
+                    decoration: InputDecoration(
+                      hintText: 'Re-enter Password',
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureConfirmPassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed:
+                            () => setState(
+                              () =>
+                                  _obscureConfirmPassword =
+                                      !_obscureConfirmPassword,
+                            ),
+                      ),
+                    ),
+                    validator: (text) {
+                      if (text != _passwordController.text) {
+                        return 'Passwords do not match';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 8.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -145,25 +215,22 @@ class _SigninScreenState extends State<SigninScreen> {
                       ),
                     ],
                   ),
-
                   SizedBox(height: 16.h),
-
-                  TextWidgetButton(text: 'Sign In', onPressed: _handleSignIn),
-
+                  TextWidgetButton(text: "Sign Up", onPressed: _handleSignUp),
                   SizedBox(height: 24.h),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Don't have an account? "),
+                      const Text("Already have an account? "),
                       TextButton(
                         onPressed: () {
-                          Get.off(SignupScreen());
+                          Get.off(SigninScreen());
                         },
-                        child: const Text('Register now'),
+                        child: const Text("Sign In"),
                       ),
                     ],
                   ),
+                  SizedBox(height: 20.h),
                 ],
               ),
             ),

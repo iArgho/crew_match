@@ -57,10 +57,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
               ),
               SizedBox(height: 24.h),
-              Text(
-                'Email',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
-              ),
+              Text('Email', style: TextStyle(fontSize: 16.sp)),
               SizedBox(height: 8.h),
               TextFormField(
                 controller: _emailController,

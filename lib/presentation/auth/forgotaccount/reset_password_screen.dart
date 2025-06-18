@@ -61,10 +61,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
               ),
               SizedBox(height: 24.h),
-              Text(
-                'New Password',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
-              ),
+              Text('New Password', style: TextStyle(fontSize: 16.sp)),
               SizedBox(height: 8.h),
               TextFormField(
                 controller: _newPasswordController,
@@ -84,10 +81,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 },
               ),
               SizedBox(height: 16.h),
-              Text(
-                'Confirm Password',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
-              ),
+              Text('Confirm Password', style: TextStyle(fontSize: 16.sp)),
               SizedBox(height: 8.h),
               TextFormField(
                 controller: _confirmPasswordController,
