@@ -1,4 +1,4 @@
-import 'package:crew_match/presentation/auth/signin_screen.dart';
+import 'package:crew_match/presentation/auth/signin/signin_screen.dart';
 import 'package:crew_match/utility/parth_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

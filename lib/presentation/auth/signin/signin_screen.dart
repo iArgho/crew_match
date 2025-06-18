@@ -1,7 +1,10 @@
+import 'package:crew_match/presentation/auth/forgotaccount/forgot_password_screen.dart';
+import 'package:crew_match/presentation/widget/text_widget_button.dart';
 import 'package:crew_match/utility/parth_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -27,7 +30,6 @@ class _SigninScreenState extends State<SigninScreen> {
 
   void _handleSignIn() {
     if (_formKey.currentState!.validate()) {
-      // Perform sign-in logic here
       final email = _emailController.text;
       final password = _passwordController.text;
       print('Email: $email, Password: $password, Remember: $rememberMe');
@@ -147,7 +149,9 @@ class _SigninScreenState extends State<SigninScreen> {
                         ],
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.off(() => ForgotPasswordScreen());
+                        },
                         child: const Text('Forgot Password?'),
                       ),
                     ],
@@ -155,35 +159,10 @@ class _SigninScreenState extends State<SigninScreen> {
 
                   SizedBox(height: 16.h),
 
-                  // Sign In Button
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.r),
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFFD30579), Color(0xFFFAB558)],
-                      ),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: _handleSignIn,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        padding: EdgeInsets.symmetric(vertical: 16.h),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                      ),
-                      child: Text(
-                        'Sign In',
-                        style: TextStyle(fontSize: 16.sp, color: Colors.white),
-                      ),
-                    ),
-                  ),
+                  TextWidgetButton(text: 'Sign In', onPressed: _handleSignIn),
 
                   SizedBox(height: 24.h),
 
-                  // Register Prompt
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
