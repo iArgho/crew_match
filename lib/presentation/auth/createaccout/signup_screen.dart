@@ -1,3 +1,4 @@
+import 'package:crew_match/presentation/auth/createaccout/personal_details_screen.dart';
 import 'package:crew_match/presentation/auth/forgotaccount/forgot_password_screen.dart';
 import 'package:crew_match/presentation/auth/signin/signin_screen.dart';
 import 'package:crew_match/presentation/widget/text_widget_button.dart';
@@ -216,7 +217,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     ],
                   ),
                   SizedBox(height: 16.h),
-                  TextWidgetButton(text: "Sign Up", onPressed: _handleSignUp),
+                  TextWidgetButton(
+                    text: 'Sign Up',
+                    onPressed: () {
+                      Get.off(() => PersonalDetailsScreen());
+                    },
+                  ),
                   SizedBox(height: 24.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

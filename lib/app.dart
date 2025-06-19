@@ -18,9 +18,11 @@ class CrewMatch extends StatelessWidget {
           title: 'Crew Match',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
+            primaryColor: const Color(0xFFFF2D55),
             fontFamily: PathUtils.manropeFont,
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
             useMaterial3: true,
+            badgeTheme: const BadgeThemeData(backgroundColor: Colors.white),
           ),
           home: const SplashScreen(),
         );
