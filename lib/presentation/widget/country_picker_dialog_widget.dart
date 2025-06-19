@@ -79,7 +79,7 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
                   trailing: IconButton(
                     icon: Icon(
                       alreadyAdded ? Icons.check : Icons.add,
-                      color: alreadyAdded ? Colors.grey : Colors.blue,
+                      color: alreadyAdded ? Colors.grey : Colors.pink,
                     ),
                     onPressed:
                         alreadyAdded

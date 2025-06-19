@@ -21,10 +21,29 @@ class _DatePickerFormFieldState extends State<DatePickerFormField> {
   Future<void> _pickDate() async {
     DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime(1990),
-      firstDate: DateTime(1900),
+      initialDate: DateTime(2000),
+      firstDate: DateTime(2000),
       lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color(0xFFD30579), // Pink for selected date
+              onPrimary: Colors.white, // Text on selected date
+              onSurface: Colors.black, // Default text color
+            ),
+            dialogBackgroundColor: Colors.white,
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Color(0xFFD30579), // Button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
+
     if (picked != null) {
       widget.controller.text = DateFormat('yyyy-MM-dd').format(picked);
       widget.onDateSelected?.call(picked);
@@ -39,7 +58,16 @@ class _DatePickerFormFieldState extends State<DatePickerFormField> {
       onTap: _pickDate,
       decoration: InputDecoration(
         hintText: widget.hintText,
-        border: const OutlineInputBorder(),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0), // Slightly square corners
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: Color(0xFFD30579)), // Pink focus border
+        ),
         suffixIcon: const Icon(Icons.calendar_today, color: Color(0xFFD30579)),
       ),
     );

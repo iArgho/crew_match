@@ -120,7 +120,7 @@ class _SigninScreenState extends State<SigninScreen> {
                             return Colors.transparent;
                           }),
                           side: const BorderSide(
-                            color: Color(0xFFD30579),
+                            color: Color.fromARGB(255, 135, 132, 134),
                             width: 2,
                           ),
                           checkColor: Colors.white,

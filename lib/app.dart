@@ -22,19 +22,40 @@ class CrewMatch extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
             useMaterial3: true,
             badgeTheme: const BadgeThemeData(backgroundColor: Colors.white),
+
+            // ✅ Global Checkbox Theme
+            checkboxTheme: CheckboxThemeData(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
+              ),
+              fillColor: MaterialStateProperty.resolveWith<Color>((states) {
+                if (states.contains(MaterialState.selected)) {
+                  return const Color(0xFFD30579);
+                }
+                return Colors.transparent;
+              }),
+              side: const BorderSide(
+                color: Color.fromARGB(255, 135, 132, 134),
+                width: 2,
+              ),
+              checkColor: MaterialStateProperty.all(Colors.white),
+              visualDensity: VisualDensity.compact,
+            ),
+
+            // Input Theme
             inputDecorationTheme: InputDecorationTheme(
               filled: true,
-              fillColor: Colors.grey.withOpacity(0.1),
+              fillColor: Colors.grey.withOpacity(0.08),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 12.w,
                 vertical: 14.h,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.r),
+                borderRadius: BorderRadius.circular(5.r),
                 borderSide: const BorderSide(color: Colors.grey),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.r),
+                borderRadius: BorderRadius.circular(5.r),
                 borderSide: const BorderSide(color: Colors.grey, width: 2),
               ),
               hintStyle: TextStyle(fontSize: 14.sp),
