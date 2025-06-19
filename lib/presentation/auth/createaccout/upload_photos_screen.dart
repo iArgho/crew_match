@@ -1,6 +1,7 @@
 import 'package:crew_match/presentation/auth/createaccout/personal_details_screen.dart';
 import 'package:crew_match/presentation/widget/image_picker_widget.dart';
 import 'package:crew_match/presentation/widget/text_widget_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,7 @@ class UploadPhotosScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
