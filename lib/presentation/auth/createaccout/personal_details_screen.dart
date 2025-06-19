@@ -2,7 +2,6 @@ import 'package:crew_match/presentation/widget/country_picker_dialog_widget.dart
 import 'package:crew_match/presentation/widget/date_picker_form_field.dart'; // Import the new widget
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
 class PersonalDetailsScreen extends StatefulWidget {
   const PersonalDetailsScreen({super.key});
@@ -109,9 +108,14 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     ['Male', 'Female'].map((value) {
                       return Expanded(
                         child: RadioListTile<String>(
-                          title: Text(value),
+                          title: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(value),
+                          ),
                           value: value,
                           groupValue: gender,
+                          activeColor: const Color(0xFFD30579),
+                          contentPadding: EdgeInsets.zero,
                           onChanged: (val) => setState(() => gender = val),
                         ),
                       );

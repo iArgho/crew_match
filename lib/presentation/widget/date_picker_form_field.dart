@@ -40,7 +40,7 @@ class _DatePickerFormFieldState extends State<DatePickerFormField> {
       decoration: InputDecoration(
         hintText: widget.hintText,
         border: const OutlineInputBorder(),
-        suffixIcon: const Icon(Icons.calendar_today),
+        suffixIcon: const Icon(Icons.calendar_today, color: Color(0xFFD30579)),
       ),
     );
   }

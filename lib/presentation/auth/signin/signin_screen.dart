@@ -15,7 +15,6 @@ class SigninScreen extends StatefulWidget {
 }
 
 class _SigninScreenState extends State<SigninScreen> {
-  final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -30,11 +29,9 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 
   void _handleSignIn() {
-    if (_formKey.currentState!.validate()) {
-      final email = _emailController.text;
-      final password = _passwordController.text;
-      print('Email: $email, Password: $password, Remember: $rememberMe');
-    }
+    final email = _emailController.text;
+    final password = _passwordController.text;
+    print('Email: $email, Password: $password, Remember: $rememberMe');
   }
 
   @override
@@ -45,127 +42,126 @@ class _SigninScreenState extends State<SigninScreen> {
         padding: EdgeInsets.symmetric(horizontal: 24.0.w),
         child: Center(
           child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  SvgPicture.asset(
-                    PathUtils.logoColor,
-                    width: 0.7.sw,
-                    semanticsLabel: 'App Logo',
-                  ),
+            child: Column(
+              children: [
+                SvgPicture.asset(
+                  PathUtils.logoColor,
+                  width: 0.7.sw,
+                  semanticsLabel: 'App Logo',
+                ),
 
-                  SizedBox(height: 32.h),
+                SizedBox(height: 32.h),
 
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Email', style: TextStyle(fontSize: 16.sp)),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Email', style: TextStyle(fontSize: 16.sp)),
+                ),
+                SizedBox(height: 8.h),
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  autofillHints: const [AutofillHints.email],
+                  decoration: const InputDecoration(
+                    hintText: 'Enter your Email',
                   ),
-                  SizedBox(height: 8.h),
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    autofillHints: const [AutofillHints.email],
-                    decoration: const InputDecoration(
-                      hintText: 'Enter your Email',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'Enter your Email';
-                      }
-                      if (!text.contains('@') || !text.contains('.')) {
-                        return 'Enter a valid Email';
-                      }
-                      return null;
-                    },
-                  ),
+                ),
 
-                  SizedBox(height: 16.h),
+                SizedBox(height: 16.h),
 
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Password', style: TextStyle(fontSize: 16.sp)),
-                  ),
-                  SizedBox(height: 8.h),
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: _obscurePassword,
-                    autofillHints: const [AutofillHints.password],
-                    decoration: InputDecoration(
-                      hintText: 'Enter Password',
-                      border: const OutlineInputBorder(),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Password', style: TextStyle(fontSize: 16.sp)),
+                ),
+                SizedBox(height: 8.h),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: _obscurePassword,
+                  autofillHints: const [AutofillHints.password],
+                  decoration: InputDecoration(
+                    hintText: 'Enter Password',
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                       ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
                     ),
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'Enter your Password';
-                      }
-                      if (text.length < 6) {
-                        return 'Password must be at least 6 characters';
-                      }
-                      return null;
-                    },
                   ),
+                ),
 
-                  SizedBox(height: 8.h),
+                SizedBox(height: 8.h),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: rememberMe,
-                            onChanged: (value) {
-                              setState(() {
-                                rememberMe = value ?? false;
-                              });
-                            },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: rememberMe,
+                          onChanged: (value) {
+                            setState(() {
+                              rememberMe = value ?? false;
+                            });
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
                           ),
-                          const Text('Remember Password'),
-                        ],
+                          fillColor: MaterialStateProperty.resolveWith<Color>((
+                            states,
+                          ) {
+                            if (states.contains(MaterialState.selected)) {
+                              return const Color(0xFFD30579);
+                            }
+                            return Colors.transparent;
+                          }),
+                          side: const BorderSide(
+                            color: Color(0xFFD30579),
+                            width: 2,
+                          ),
+                          checkColor: Colors.white,
+                        ),
+                        const Text('Remember Password'),
+                      ],
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Get.off(() => const ForgotPasswordScreen());
+                      },
+                      child: const Text(
+                        'Forgot Password?',
+                        style: TextStyle(color: Colors.blue),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Get.off(() => ForgotPasswordScreen());
-                        },
-                        child: const Text('Forgot Password?'),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 16.h),
+
+                TextWidgetButton(text: 'Sign In', onPressed: _handleSignIn),
+
+                SizedBox(height: 24.h),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Don't have an account? "),
+                    TextButton(
+                      onPressed: () {
+                        Get.off(() => const SignupScreen());
+                      },
+                      child: const Text(
+                        'Register now',
+                        style: TextStyle(color: Colors.blue),
                       ),
-                    ],
-                  ),
-
-                  SizedBox(height: 16.h),
-
-                  TextWidgetButton(text: 'Sign In', onPressed: _handleSignIn),
-
-                  SizedBox(height: 24.h),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Don't have an account? "),
-                      TextButton(
-                        onPressed: () {
-                          Get.off(SignupScreen());
-                        },
-                        child: const Text('Register now'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

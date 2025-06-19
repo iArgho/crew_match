@@ -92,7 +92,10 @@ class _OtpVerificationState extends State<OtpVerificationScreen> {
                     print("Resend OTP pressed");
                     // TODO: Implement resend logic
                   },
-                  child: const Text("Resend Now"),
+                  child: const Text(
+                    "Resend Now",
+                    style: TextStyle(color: Colors.blue),
+                  ),
                 ),
               ],
             ),

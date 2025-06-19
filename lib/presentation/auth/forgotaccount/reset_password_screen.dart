@@ -16,13 +16,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _handleResetPassword() {
-    if (_formKey.currentState?.validate() ?? false) {
-      print("Password reset to: ${_newPasswordController.text}");
-      Get.offAll(() => const SigninScreen());
-    }
+    print("Password reset to: ${_newPasswordController.text}");
+    Get.offAll(() => const SigninScreen());
   }
 
   @override
@@ -39,77 +36,54 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Get.off(() => OtpVerificationScreen());
+            Get.off(() => const OtpVerificationScreen());
           },
         ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.w),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 16.h),
-              Text(
-                'Reset Your Password',
-                style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w600),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 16.h),
+            Text(
+              'Reset Your Password',
+              style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(height: 8.h),
+            Text(
+              'Please enter your new password below.',
+              style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
+            ),
+            SizedBox(height: 24.h),
+            Text('New Password', style: TextStyle(fontSize: 16.sp)),
+            SizedBox(height: 8.h),
+            TextFormField(
+              controller: _newPasswordController,
+              obscureText: true,
+              decoration: const InputDecoration(hintText: 'Enter new password'),
+            ),
+            SizedBox(height: 16.h),
+            Text('Confirm Password', style: TextStyle(fontSize: 16.sp)),
+            SizedBox(height: 8.h),
+            TextFormField(
+              controller: _confirmPasswordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                hintText: 'Confirm new password',
               ),
-              SizedBox(height: 8.h),
-              Text(
-                'Please enter your new password below.',
-                style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
-              ),
-              SizedBox(height: 24.h),
-              Text('New Password', style: TextStyle(fontSize: 16.sp)),
-              SizedBox(height: 8.h),
-              TextFormField(
-                controller: _newPasswordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  hintText: 'Enter new password',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a new password';
-                  }
-                  if (value.length < 6) {
-                    return 'Password must be at least 6 characters';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.h),
-              Text('Confirm Password', style: TextStyle(fontSize: 16.sp)),
-              SizedBox(height: 8.h),
-              TextFormField(
-                controller: _confirmPasswordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  hintText: 'Confirm new password',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value != _newPasswordController.text) {
-                    return 'Passwords do not match';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 40.h),
-
-              Text(
-                '*NOTE: Choose a password that is distinctive & you can easily remember.',
-                style: TextStyle(fontSize: 13.sp),
-              ),
-              SizedBox(height: 24.h),
-              TextWidgetButton(
-                text: 'Reset Password',
-                onPressed: _handleResetPassword,
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 40.h),
+            Text(
+              '*NOTE: Choose a password that is distinctive & you can easily remember.',
+              style: TextStyle(fontSize: 13.sp),
+            ),
+            SizedBox(height: 24.h),
+            TextWidgetButton(
+              text: 'Reset Password',
+              onPressed: _handleResetPassword,
+            ),
+          ],
         ),
       ),
     );

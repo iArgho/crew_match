@@ -18,11 +18,27 @@ class CrewMatch extends StatelessWidget {
           title: 'Crew Match',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primaryColor: const Color(0xFFFF2D55),
             fontFamily: PathUtils.manropeFont,
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
             useMaterial3: true,
             badgeTheme: const BadgeThemeData(backgroundColor: Colors.white),
+            inputDecorationTheme: InputDecorationTheme(
+              filled: true,
+              fillColor: Colors.grey.withOpacity(0.1),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 12.w,
+                vertical: 14.h,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.r),
+                borderSide: const BorderSide(color: Colors.grey),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.r),
+                borderSide: const BorderSide(color: Colors.grey, width: 2),
+              ),
+              hintStyle: TextStyle(fontSize: 14.sp),
+            ),
           ),
           home: const SplashScreen(),
         );

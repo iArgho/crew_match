@@ -204,15 +204,34 @@ class _SignupScreenState extends State<SignupScreen> {
                                 rememberMe = value ?? false;
                               });
                             },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            fillColor: MaterialStateProperty.resolveWith<Color>(
+                              (states) {
+                                if (states.contains(MaterialState.selected)) {
+                                  return const Color(0xFFD30579);
+                                }
+                                return Colors.transparent;
+                              },
+                            ),
+                            side: const BorderSide(
+                              color: Color(0xFFD30579),
+                              width: 2,
+                            ),
+                            checkColor: Colors.white,
                           ),
                           const Text('Remember Password'),
                         ],
                       ),
                       TextButton(
                         onPressed: () {
-                          Get.off(() => ForgotPasswordScreen());
+                          Get.off(() => const ForgotPasswordScreen());
                         },
-                        child: const Text('Forgot Password?'),
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(color: Colors.blue),
+                        ),
                       ),
                     ],
                   ),
@@ -232,7 +251,10 @@ class _SignupScreenState extends State<SignupScreen> {
                         onPressed: () {
                           Get.off(SigninScreen());
                         },
-                        child: const Text("Sign In"),
+                        child: const Text(
+                          "Sign In",
+                          style: TextStyle(color: Colors.blue),
+                        ),
                       ),
                     ],
                   ),
