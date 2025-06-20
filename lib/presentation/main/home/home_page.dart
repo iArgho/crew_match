@@ -13,7 +13,8 @@ class HomeScreen extends StatelessWidget {
         'age': '25',
         'image':
             'https://i.pinimg.com/736x/7e/33/57/7e3357cfb8ee9bf31cf2a5b427b50a92.jpg',
-        'quote': 'Loves hiking & coffee.',
+        'bio':
+            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
         'company': 'Skyline Ventures',
         'ship': 'SS Horizon',
       },
@@ -22,7 +23,8 @@ class HomeScreen extends StatelessWidget {
         'age': '22',
         'image':
             'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=800&q=80',
-        'quote': 'Always smiling.',
+        'bio':
+            'Always smiling and full of energy. She thrives in social settings and loves dancing, art, and volunteering for good causes.',
         'company': 'AquaTech Ltd.',
         'ship': 'MV Ocean Pearl',
       },
@@ -31,7 +33,8 @@ class HomeScreen extends StatelessWidget {
         'age': '28',
         'image':
             'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=800&q=80',
-        'quote': 'Music is life.',
+        'bio':
+            'Music is life for Liam. He plays guitar in a band and writes his own songs. Also loves road trips and vintage cars.',
         'company': 'MarineX',
         'ship': 'SS Voyager',
       },
@@ -60,34 +63,22 @@ class _SwipeableCardStackState extends State<SwipeableCardStack> {
     setState(() {
       isDragging = true;
       dragPosition += details.delta.dx;
-      // Rotate 35 degrees (in radians) for left swipe, no rotation for right
-      rotationAngle =
-          dragPosition < 0
-              ? (dragPosition / 500 * 0.61)
-              : 0; // 0.61 radians ≈ 35 degrees
+      rotationAngle = dragPosition < 0 ? (dragPosition / 500 * 0.61) : 0;
     });
   }
 
   void _onHorizontalDragEnd(DragEndDetails details) {
-    const double swipeThreshold = 150; // Pixels to consider a swipe
+    const double swipeThreshold = 150;
     setState(() {
       isDragging = false;
       if (dragPosition.abs() > swipeThreshold) {
         if (dragPosition < 0) {
-          // Left swipe - Dislike
           print('Disliked: ${widget.people[currentIndex]['name']}');
         } else {
-          // Right swipe - Like
           print('Liked: ${widget.people[currentIndex]['name']}');
         }
-        // Move to next card
-        if (currentIndex < widget.people.length - 1) {
-          currentIndex++;
-        } else {
-          currentIndex = 0; // Loop back to start
-        }
+        currentIndex = (currentIndex + 1) % widget.people.length;
       }
-      // Reset position and rotation
       dragPosition = 0;
       rotationAngle = 0;
     });
@@ -95,31 +86,43 @@ class _SwipeableCardStackState extends State<SwipeableCardStack> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // Show next card in the background (if available)
-        if (currentIndex < widget.people.length - 1)
-          buildCard(context, widget.people[currentIndex + 1], 0, 0, false),
-        // Current card with swipe functionality
-        if (currentIndex < widget.people.length)
-          GestureDetector(
-            onHorizontalDragUpdate: _onHorizontalDragUpdate,
-            onHorizontalDragEnd: _onHorizontalDragEnd,
-            child: Transform.translate(
-              offset: Offset(isDragging ? dragPosition : 0, 0),
-              child: Transform.rotate(
-                angle: rotationAngle,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Stack(
+          children: [
+            if (currentIndex < widget.people.length - 1)
+              Positioned.fill(
                 child: buildCard(
                   context,
-                  widget.people[currentIndex],
+                  widget.people[currentIndex + 1],
                   6.w,
                   10.r,
-                  true,
+                  false,
                 ),
               ),
-            ),
-          ),
-      ],
+            if (currentIndex < widget.people.length)
+              Positioned.fill(
+                child: GestureDetector(
+                  onHorizontalDragUpdate: _onHorizontalDragUpdate,
+                  onHorizontalDragEnd: _onHorizontalDragEnd,
+                  child: Transform.translate(
+                    offset: Offset(isDragging ? dragPosition : 0, 0),
+                    child: Transform.rotate(
+                      angle: rotationAngle,
+                      child: buildCard(
+                        context,
+                        widget.people[currentIndex],
+                        6.w,
+                        10.r,
+                        true,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 
@@ -136,7 +139,6 @@ class _SwipeableCardStackState extends State<SwipeableCardStack> {
         borderRadius: BorderRadius.circular(borderRadius),
         child: Stack(
           children: [
-            // Background image
             Image.network(
               person['image']!,
               width: double.infinity,
@@ -151,7 +153,6 @@ class _SwipeableCardStackState extends State<SwipeableCardStack> {
                   (context, error, stackTrace) =>
                       const Center(child: Icon(Icons.broken_image, size: 60)),
             ),
-            // Gradient overlay
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -162,7 +163,6 @@ class _SwipeableCardStackState extends State<SwipeableCardStack> {
                 ),
               ),
             ),
-            // Name, quote, and buttons
             if (isForeground)
               Positioned(
                 bottom: 30.h,
@@ -172,53 +172,66 @@ class _SwipeableCardStackState extends State<SwipeableCardStack> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    // Name & Quote
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '${person['name']}, ${person['age']}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.bold,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black.withOpacity(0.6),
-                                blurRadius: 6,
-                              ),
-                            ],
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => UserDetailedHomePage(
+                                  name: person['name']!,
+                                  bio: person['bio'] ?? '',
+                                  company: person['company'] ?? '',
+                                  ship: person['ship'] ?? '',
+                                  image: person['image']!,
+                                ),
                           ),
-                        ),
-                        SizedBox(height: 4.h),
-                        Text(
-                          '“${person['quote']}”',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.sp,
-
-                            fontWeight: FontWeight.w500,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black.withOpacity(0.4),
-                                blurRadius: 4,
-                              ),
-                            ],
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '${person['name']}, ${person['age']}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24.sp,
+                              fontWeight: FontWeight.bold,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withOpacity(0.6),
+                                  blurRadius: 6,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                          SizedBox(height: 4.h),
+                          Text(
+                            '“${person['bio']!.split(" ").take(4).join(" ")}...”',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withOpacity(0.4),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    // Action buttons
                     Transform.translate(
                       offset: Offset(0, -30.h),
                       child: Row(
                         children: [
-                          // ❌ Button (Triggers left swipe)
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                dragPosition = -200; // Simulate left swipe
+                                dragPosition = -200;
                                 _onHorizontalDragEnd(DragEndDetails());
                               });
                             },
@@ -236,47 +249,26 @@ class _SwipeableCardStackState extends State<SwipeableCardStack> {
                             ),
                           ),
                           SizedBox(width: 12.w),
-                          // ❤️ Button (Navigate or trigger right swipe)
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                dragPosition = 200; // Simulate right swipe
-                                _onHorizontalDragEnd(DragEndDetails());
-                              });
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => UserDetailedHomePage(
-                                        name: person['name']!,
-                                        bio: person['quote'] ?? '',
-                                        company: person['company'] ?? '',
-                                        ship: person['ship'] ?? '',
-                                        image: person['image']!,
-                                      ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(8.w),
-                              decoration: const BoxDecoration(
+
+                          Container(
+                            padding: EdgeInsets.all(8.w),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: ShaderMask(
+                              shaderCallback:
+                                  (bounds) => const LinearGradient(
+                                    colors: [
+                                      Color(0xFFD30579),
+                                      Color(0xFFFAB558),
+                                    ],
+                                  ).createShader(bounds),
+                              blendMode: BlendMode.srcIn,
+                              child: Icon(
+                                Icons.favorite,
+                                size: 45.sp,
                                 color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              child: ShaderMask(
-                                shaderCallback:
-                                    (bounds) => const LinearGradient(
-                                      colors: [
-                                        Color(0xFFD30579),
-                                        Color(0xFFFAB558),
-                                      ],
-                                    ).createShader(bounds),
-                                blendMode: BlendMode.srcIn,
-                                child: Icon(
-                                  Icons.favorite,
-                                  size: 45.sp,
-                                  color: Colors.white,
-                                ),
                               ),
                             ),
                           ),

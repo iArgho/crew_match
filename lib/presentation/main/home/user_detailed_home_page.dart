@@ -20,173 +20,148 @@ class UserDetailedHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 4,
-        centerTitle: true,
-        title: Text(
-          name,
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 18.sp,
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            flex: 6,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20.r),
-                    child: Image.network(
-                      image,
-                      fit: BoxFit.cover,
-                      loadingBuilder:
-                          (context, child, progress) =>
-                              progress == null
-                                  ? child
-                                  : const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                      errorBuilder:
-                          (context, error, stackTrace) => const Center(
-                            child: Icon(Icons.broken_image, size: 60),
-                          ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
+      appBar: AppBar(title: Text(name), centerTitle: true, elevation: 4),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Top image section
+            SizedBox(
+              height: 400.h, // Fixed height for image section
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    ClipRRect(
                       borderRadius: BorderRadius.circular(20.r),
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          Colors.black.withOpacity(0.7),
-                          Colors.transparent,
-                        ],
-                        stops: const [0.0, 0.5],
+                      child: Image.network(
+                        image,
+                        fit: BoxFit.cover,
+                        loadingBuilder:
+                            (context, child, progress) =>
+                                progress == null
+                                    ? child
+                                    : const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                        errorBuilder:
+                            (context, error, stackTrace) => const Center(
+                              child: Icon(Icons.broken_image, size: 60),
+                            ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 30.h,
-                    left: 20.w,
-                    right: 20.w,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              name,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24.sp,
-                                fontWeight: FontWeight.bold,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withOpacity(0.6),
-                                    blurRadius: 6,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 4.h),
-                            Text(
-                              '“$bio”',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14.sp,
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.w400,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withOpacity(0.4),
-                                    blurRadius: 4,
-                                  ),
-                                ],
-                              ),
-                            ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.r),
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            Colors.black.withOpacity(0.7),
+                            Colors.transparent,
                           ],
+                          stops: const [0.0, 0.5],
                         ),
-                        Transform.translate(
-                          offset: Offset(0, -30.h),
-                          child: Row(
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 30.h,
+                      left: 20.w,
+                      right: 20.w,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Container(
-                                padding: EdgeInsets.all(2.w),
-                                decoration: const BoxDecoration(
+                              Text(
+                                name,
+                                style: TextStyle(
                                   color: Colors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.clear,
-                                  color: Colors.red,
-                                  size: 35.sp,
-                                ),
-                              ),
-                              SizedBox(width: 12.w),
-                              Container(
-                                padding: EdgeInsets.all(8.w),
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: ShaderMask(
-                                  shaderCallback:
-                                      (bounds) => const LinearGradient(
-                                        colors: [
-                                          Color(0xFFD30579),
-                                          Color(0xFFFAB558),
-                                        ],
-                                      ).createShader(bounds),
-                                  blendMode: BlendMode.srcIn,
-                                  child: Icon(
-                                    Icons.favorite,
-                                    size: 45.sp,
-                                    color: Colors.white,
-                                  ),
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black.withOpacity(0.6),
+                                      blurRadius: 6,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                          Transform.translate(
+                            offset: Offset(0, 0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(2.w),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.clear,
+                                    color: Colors.red,
+                                    size: 35.sp,
+                                  ),
+                                ),
+                                SizedBox(width: 12.w),
+                                Container(
+                                  padding: EdgeInsets.all(8.w),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: ShaderMask(
+                                    shaderCallback:
+                                        (bounds) => const LinearGradient(
+                                          colors: [
+                                            Color(0xFFD30579),
+                                            Color(0xFFFAB558),
+                                          ],
+                                        ).createShader(bounds),
+                                    blendMode: BlendMode.srcIn,
+                                    child: Icon(
+                                      Icons.favorite,
+                                      size: 45.sp,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
 
-          // Bottom detail section (approx. 40% height)
-          Expanded(
-            flex: 3,
-            child: Padding(
+            // Bottom detail section
+            Padding(
               padding: EdgeInsets.all(20.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Company:", style: _headerStyle),
+                  Text("Bio", style: _headerStyle),
+                  Text(bio, style: _bodyStyle),
+                  SizedBox(height: 16.h),
+                  Text("Company", style: _headerStyle),
                   Text(company, style: _bodyStyle),
                   SizedBox(height: 16.h),
-                  Text("Ship Name:", style: _headerStyle),
+                  Text("Ship Name", style: _headerStyle),
                   Text(ship, style: _bodyStyle),
+                  SizedBox(height: 20.h),
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -7,11 +7,11 @@ class DatePickerFormField extends StatefulWidget {
   final Function(DateTime?)? onDateSelected;
 
   const DatePickerFormField({
-    Key? key,
+    super.key,
     required this.controller,
     this.hintText = 'Select a date',
     this.onDateSelected,
-  }) : super(key: key);
+  });
 
   @override
   State<DatePickerFormField> createState() => _DatePickerFormFieldState();
@@ -28,9 +28,9 @@ class _DatePickerFormFieldState extends State<DatePickerFormField> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: Color(0xFFD30579), // Pink for selected date
-              onPrimary: Colors.white, // Text on selected date
-              onSurface: Colors.black, // Default text color
+              primary: Color(0xFFD30579),
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
             ),
             dialogBackgroundColor: Colors.white,
             textButtonTheme: TextButtonThemeData(
