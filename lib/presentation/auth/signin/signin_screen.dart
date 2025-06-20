@@ -1,5 +1,6 @@
 import 'package:crew_match/presentation/auth/createaccout/signup_screen.dart';
 import 'package:crew_match/presentation/auth/forgotaccount/forgot_password_screen.dart';
+import 'package:crew_match/presentation/main/main_screen.dart';
 import 'package:crew_match/presentation/widget/text_widget_button.dart';
 import 'package:crew_match/utility/parth_utils.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +143,12 @@ class _SigninScreenState extends State<SigninScreen> {
 
                 SizedBox(height: 16.h),
 
-                TextWidgetButton(text: 'Sign In', onPressed: _handleSignIn),
+                TextWidgetButton(
+                  text: 'Sign In',
+                  onPressed: () {
+                    Get.off(() => MainPage());
+                  },
+                ),
 
                 SizedBox(height: 24.h),
 

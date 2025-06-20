@@ -24,7 +24,6 @@ class CrewMatch extends StatelessWidget {
             useMaterial3: true,
             badgeTheme: const BadgeThemeData(backgroundColor: Colors.white),
 
-            // ✅ Global Checkbox Theme
             checkboxTheme: CheckboxThemeData(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
@@ -43,7 +42,6 @@ class CrewMatch extends StatelessWidget {
               visualDensity: VisualDensity.compact,
             ),
 
-            // Input Theme
             inputDecorationTheme: InputDecorationTheme(
               filled: true,
               fillColor: Colors.grey.withOpacity(0.08),
@@ -60,6 +58,19 @@ class CrewMatch extends StatelessWidget {
                 borderSide: const BorderSide(color: Colors.grey, width: 2),
               ),
               hintStyle: TextStyle(fontSize: 14.sp),
+            ),
+
+            // Added white AppBar theme:
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              iconTheme: const IconThemeData(color: Colors.black),
+              titleTextStyle: TextStyle(
+                color: Colors.black,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+                fontFamily: PathUtils.manropeFont,
+              ),
             ),
           ),
           home: const SplashScreen(),
