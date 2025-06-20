@@ -14,6 +14,8 @@ class HomeScreen extends StatelessWidget {
         'image':
             'https://i.pinimg.com/736x/7e/33/57/7e3357cfb8ee9bf31cf2a5b427b50a92.jpg',
         'quote': 'Loves hiking & coffee.',
+        'company': 'Skyline Ventures',
+        'ship': 'SS Horizon',
       },
       {
         'name': 'Mia',
@@ -21,6 +23,8 @@ class HomeScreen extends StatelessWidget {
         'image':
             'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=800&q=80',
         'quote': 'Always smiling.',
+        'company': 'AquaTech Ltd.',
+        'ship': 'MV Ocean Pearl',
       },
       {
         'name': 'Liam',
@@ -28,109 +32,197 @@ class HomeScreen extends StatelessWidget {
         'image':
             'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=800&q=80',
         'quote': 'Music is life.',
+        'company': 'MarineX',
+        'ship': 'SS Voyager',
       },
     ];
 
-    final controller = PageController(viewportFraction: 0.92);
+    return Scaffold(body: SwipeableCardStack(people: people));
+  }
+}
 
-    return PageView.builder(
-      controller: controller,
-      itemCount: people.length,
-      itemBuilder: (context, index) {
-        final person = people[index];
+class SwipeableCardStack extends StatefulWidget {
+  final List<Map<String, String>> people;
 
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 6.w),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10.r),
-            child: Stack(
-              children: [
-                // Background image
-                Image.network(
-                  person['image']!,
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                  loadingBuilder:
-                      (context, child, progress) =>
-                          progress == null
-                              ? child
-                              : const Center(
-                                child: CircularProgressIndicator(),
+  const SwipeableCardStack({super.key, required this.people});
+
+  @override
+  _SwipeableCardStackState createState() => _SwipeableCardStackState();
+}
+
+class _SwipeableCardStackState extends State<SwipeableCardStack> {
+  int currentIndex = 0;
+  double dragPosition = 0;
+  double rotationAngle = 0;
+  bool isDragging = false;
+
+  void _onHorizontalDragUpdate(DragUpdateDetails details) {
+    setState(() {
+      isDragging = true;
+      dragPosition += details.delta.dx;
+      // Rotate 35 degrees (in radians) for left swipe, no rotation for right
+      rotationAngle =
+          dragPosition < 0
+              ? (dragPosition / 500 * 0.61)
+              : 0; // 0.61 radians ≈ 35 degrees
+    });
+  }
+
+  void _onHorizontalDragEnd(DragEndDetails details) {
+    const double swipeThreshold = 150; // Pixels to consider a swipe
+    setState(() {
+      isDragging = false;
+      if (dragPosition.abs() > swipeThreshold) {
+        if (dragPosition < 0) {
+          // Left swipe - Dislike
+          print('Disliked: ${widget.people[currentIndex]['name']}');
+        } else {
+          // Right swipe - Like
+          print('Liked: ${widget.people[currentIndex]['name']}');
+        }
+        // Move to next card
+        if (currentIndex < widget.people.length - 1) {
+          currentIndex++;
+        } else {
+          currentIndex = 0; // Loop back to start
+        }
+      }
+      // Reset position and rotation
+      dragPosition = 0;
+      rotationAngle = 0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // Show next card in the background (if available)
+        if (currentIndex < widget.people.length - 1)
+          buildCard(context, widget.people[currentIndex + 1], 0, 0, false),
+        // Current card with swipe functionality
+        if (currentIndex < widget.people.length)
+          GestureDetector(
+            onHorizontalDragUpdate: _onHorizontalDragUpdate,
+            onHorizontalDragEnd: _onHorizontalDragEnd,
+            child: Transform.translate(
+              offset: Offset(isDragging ? dragPosition : 0, 0),
+              child: Transform.rotate(
+                angle: rotationAngle,
+                child: buildCard(
+                  context,
+                  widget.people[currentIndex],
+                  6.w,
+                  10.r,
+                  true,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget buildCard(
+    BuildContext context,
+    Map<String, String> person,
+    double padding,
+    double borderRadius,
+    bool isForeground,
+  ) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: padding),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(borderRadius),
+        child: Stack(
+          children: [
+            // Background image
+            Image.network(
+              person['image']!,
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover,
+              loadingBuilder:
+                  (context, child, progress) =>
+                      progress == null
+                          ? child
+                          : const Center(child: CircularProgressIndicator()),
+              errorBuilder:
+                  (context, error, stackTrace) =>
+                      const Center(child: Icon(Icons.broken_image, size: 60)),
+            ),
+            // Gradient overlay
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [Colors.black.withOpacity(0.7), Colors.transparent],
+                  stops: const [0.0, 0.5],
+                ),
+              ),
+            ),
+            // Name, quote, and buttons
+            if (isForeground)
+              Positioned(
+                bottom: 30.h,
+                left: 20.w,
+                right: 20.w,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // Name & Quote
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '${person['name']}, ${person['age']}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black.withOpacity(0.6),
+                                blurRadius: 6,
                               ),
-                  errorBuilder:
-                      (context, error, stackTrace) => const Center(
-                        child: Icon(Icons.broken_image, size: 60),
-                      ),
-                ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 4.h),
+                        Text(
+                          '“${person['quote']}”',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
 
-                // Gradient overlay
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        Colors.black.withOpacity(0.7),
-                        Colors.transparent,
+                            fontWeight: FontWeight.w500,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black.withOpacity(0.4),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
-                      stops: const [0.0, 0.5],
                     ),
-                  ),
-                ),
-
-                // Name, age, quote, and buttons
-                Positioned(
-                  bottom: 30.h,
-                  left: 20.w,
-                  right: 20.w,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
+                    // Action buttons
+                    Transform.translate(
+                      offset: Offset(0, -30.h),
+                      child: Row(
                         children: [
-                          Text(
-                            '${person['name']}, ${person['age']}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24.sp,
-                              fontWeight: FontWeight.bold,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black.withOpacity(0.6),
-                                  blurRadius: 6,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 4.h),
-                          Text(
-                            '“${person['quote']}”',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14.sp,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w400,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black.withOpacity(0.4),
-                                  blurRadius: 4,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      Transform.translate(
-                        offset: Offset(0, -30.h),
-                        child: Row(
-                          children: [
-                            // Cross icon
-                            Container(
+                          // ❌ Button (Triggers left swipe)
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                dragPosition = -200; // Simulate left swipe
+                                _onHorizontalDragEnd(DragEndDetails());
+                              });
+                            },
+                            child: Container(
                               padding: EdgeInsets.all(2.w),
                               decoration: const BoxDecoration(
                                 color: Colors.white,
@@ -142,53 +234,61 @@ class HomeScreen extends StatelessWidget {
                                 size: 35.sp,
                               ),
                             ),
-                            SizedBox(width: 12.w),
-                            // Favorite icon with navigation
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) =>
-                                            const UserDetailedHomePage(),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(8.w),
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
+                          ),
+                          SizedBox(width: 12.w),
+                          // ❤️ Button (Navigate or trigger right swipe)
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                dragPosition = 200; // Simulate right swipe
+                                _onHorizontalDragEnd(DragEndDetails());
+                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => UserDetailedHomePage(
+                                        name: person['name']!,
+                                        bio: person['quote'] ?? '',
+                                        company: person['company'] ?? '',
+                                        ship: person['ship'] ?? '',
+                                        image: person['image']!,
+                                      ),
                                 ),
-                                child: ShaderMask(
-                                  shaderCallback:
-                                      (bounds) => const LinearGradient(
-                                        colors: [
-                                          Color(0xFFD30579),
-                                          Color(0xFFFAB558),
-                                        ],
-                                      ).createShader(bounds),
-                                  blendMode: BlendMode.srcIn,
-                                  child: Icon(
-                                    Icons.favorite,
-                                    size: 45.sp,
-                                    color: Colors.white,
-                                  ),
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(8.w),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: ShaderMask(
+                                shaderCallback:
+                                    (bounds) => const LinearGradient(
+                                      colors: [
+                                        Color(0xFFD30579),
+                                        Color(0xFFFAB558),
+                                      ],
+                                    ).createShader(bounds),
+                                blendMode: BlendMode.srcIn,
+                                child: Icon(
+                                  Icons.favorite,
+                                  size: 45.sp,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        );
-      },
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
