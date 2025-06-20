@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
         'image':
             'https://i.pinimg.com/736x/7e/33/57/7e3357cfb8ee9bf31cf2a5b427b50a92.jpg',
         'bio':
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+            'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
         'company': 'Skyline Ventures',
         'ship': 'SS Horizon',
       },
@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
         'image':
             'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=800&q=80',
         'bio':
-            'Music is life for Liam. He plays guitar in a band and writes his own songs. Also loves road trips and vintage cars.',
+            'Music is life for Liam. He plays guitar in a band and writes his own songs.',
         'company': 'MarineX',
         'ship': 'SS Voyager',
       },
@@ -63,7 +63,9 @@ class _SwipeableCardStackState extends State<SwipeableCardStack> {
     setState(() {
       isDragging = true;
       dragPosition += details.delta.dx;
-      rotationAngle = dragPosition < 0 ? (dragPosition / 500 * 0.61) : 0;
+
+      // ✅ Apply symmetric rotation
+      rotationAngle = (dragPosition / 500).clamp(-1.0, 1.0) * 0.61;
     });
   }
 
@@ -249,26 +251,33 @@ class _SwipeableCardStackState extends State<SwipeableCardStack> {
                             ),
                           ),
                           SizedBox(width: 12.w),
-
-                          Container(
-                            padding: EdgeInsets.all(8.w),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                            child: ShaderMask(
-                              shaderCallback:
-                                  (bounds) => const LinearGradient(
-                                    colors: [
-                                      Color(0xFFD30579),
-                                      Color(0xFFFAB558),
-                                    ],
-                                  ).createShader(bounds),
-                              blendMode: BlendMode.srcIn,
-                              child: Icon(
-                                Icons.favorite,
-                                size: 45.sp,
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                dragPosition = 200;
+                                _onHorizontalDragEnd(DragEndDetails());
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(8.w),
+                              decoration: const BoxDecoration(
                                 color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: ShaderMask(
+                                shaderCallback:
+                                    (bounds) => const LinearGradient(
+                                      colors: [
+                                        Color(0xFFD30579),
+                                        Color(0xFFFAB558),
+                                      ],
+                                    ).createShader(bounds),
+                                blendMode: BlendMode.srcIn,
+                                child: Icon(
+                                  Icons.favorite,
+                                  size: 45.sp,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),

@@ -26,7 +26,7 @@ class UserDetailedHomePage extends StatelessWidget {
           children: [
             // Top image section
             SizedBox(
-              height: 400.h, // Fixed height for image section
+              height: 500.h,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Stack(
@@ -142,20 +142,25 @@ class UserDetailedHomePage extends StatelessWidget {
               ),
             ),
 
-            // Bottom detail section
+            // Bottom detail section with titles outside rounded boxes
             Padding(
               padding: EdgeInsets.all(20.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Bio", style: _headerStyle),
-                  Text(bio, style: _bodyStyle),
+                  SizedBox(height: 8.h),
+                  _buildContentBox(bio),
                   SizedBox(height: 16.h),
+
                   Text("Company", style: _headerStyle),
-                  Text(company, style: _bodyStyle),
+                  SizedBox(height: 8.h),
+                  _buildContentBox(company),
                   SizedBox(height: 16.h),
+
                   Text("Ship Name", style: _headerStyle),
-                  Text(ship, style: _bodyStyle),
+                  SizedBox(height: 8.h),
+                  _buildContentBox(ship),
                   SizedBox(height: 20.h),
                 ],
               ),
@@ -166,9 +171,24 @@ class UserDetailedHomePage extends StatelessWidget {
     );
   }
 
+  Widget _buildContentBox(String content) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: Colors.grey.withOpacity(0.2), // subtle grey border
+          width: 1.5,
+        ),
+      ),
+      child: Text(content, style: _bodyStyle),
+    );
+  }
+
   TextStyle get _headerStyle =>
-      const TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold);
 
   TextStyle get _bodyStyle =>
-      const TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
+      TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400);
 }
