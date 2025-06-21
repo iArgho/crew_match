@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:math' as math;
 
 class ConversationScreen extends StatefulWidget {
   final String name;
@@ -24,22 +26,8 @@ class _ConversationScreenState extends State<ConversationScreen> {
     {
       'text': 'Hi! How are you?',
       'isMe': true,
+      'isRead': true,
       'time': DateTime.now().subtract(const Duration(minutes: 14)),
-    },
-    {
-      'text': 'I’m good, thanks. What about you?',
-      'isMe': false,
-      'time': DateTime.now().subtract(const Duration(days: 1, minutes: 5)),
-    },
-    {
-      'text': 'Doing well! Working on a Flutter project.',
-      'isMe': true,
-      'time': DateTime.now().subtract(const Duration(days: 1, minutes: 3)),
-    },
-    {
-      'text': 'That’s awesome!',
-      'isMe': false,
-      'time': DateTime.now().subtract(const Duration(days: 2)),
     },
   ];
 
@@ -68,6 +56,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
       messages.add({
         'text': _controller.text.trim(),
         'isMe': true,
+        'isRead': false,
         'time': DateTime.now(),
       });
     });
@@ -76,15 +65,85 @@ class _ConversationScreenState extends State<ConversationScreen> {
     _focusNode.requestFocus();
   }
 
-  String getDateLabel(DateTime date) {
-    final now = DateTime.now();
-    final msgDate = DateTime(date.year, date.month, date.day);
-    final today = DateTime(now.year, now.month, now.day);
-    final difference = today.difference(msgDate).inDays;
+  void _showOptionsDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          elevation: 8,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          insetPadding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 8.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 6.h,
+                    horizontal: 10.w,
+                  ),
+                ),
 
-    if (difference == 0) return 'Today';
-    if (difference == 1) return 'Yesterday';
-    return "${date.day}/${date.month}/${date.year}";
+                ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 4.h,
+                  ),
+                  title: Text(
+                    'View Profile',
+                    style: TextStyle(fontSize: 16.sp),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('View Profile clicked')),
+                    );
+                  },
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 4.h,
+                  ),
+                  title: Text('Block', style: TextStyle(fontSize: 16.sp)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('User Blocked')),
+                    );
+                  },
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 4.h,
+                  ),
+                  title: Text(
+                    'Delete',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Chat Deleted')),
+                    );
+                  },
+                ),
+
+                SizedBox(height: 8.h),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -93,158 +152,197 @@ class _ConversationScreenState extends State<ConversationScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(widget.imageUrl),
-              radius: 16,
+            Container(
+              padding: EdgeInsets.all(2.r),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFFAB558), Color(0xFFD30579)],
+                ),
+              ),
+              child: Container(
+                padding: EdgeInsets.all(3.r),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(widget.imageUrl),
+                  radius: 19.r,
+                ),
+              ),
             ),
-            const SizedBox(width: 10),
-            Text('Chat with ${widget.name}'),
+            SizedBox(width: 10.w),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.name,
+                  style: Theme.of(
+                    context,
+                  ).appBarTheme.titleTextStyle?.copyWith(fontSize: 18.sp),
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 8.r,
+                      height: 8.r,
+                      decoration: const BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                    Text(
+                      "Online",
+                      style: TextStyle(fontSize: 12.sp, color: Colors.black54),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: _showOptionsDialog,
+          ),
+        ],
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(12.w),
               itemCount: messages.length,
               itemBuilder: (context, index) {
                 final msg = messages[index];
-                final msgDate = DateTime(
-                  msg['time'].year,
-                  msg['time'].month,
-                  msg['time'].day,
-                );
-
-                bool showDateHeader = false;
-                if (index == 0) {
-                  showDateHeader = true;
-                } else {
-                  final prevMsg = messages[index - 1];
-                  final prevMsgDate = DateTime(
-                    prevMsg['time'].year,
-                    prevMsg['time'].month,
-                    prevMsg['time'].day,
-                  );
-                  showDateHeader =
-                      msgDate.isBefore(prevMsgDate) ||
-                      msgDate.isAfter(prevMsgDate);
-                }
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (showDateHeader)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                color: Colors.grey.shade400,
-                                thickness: 1,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                              ),
-                              child: Text(
-                                getDateLabel(msg['time']),
-                                style: const TextStyle(
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                color: Colors.grey.shade400,
-                                thickness: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    Align(
-                      alignment:
+                return Align(
+                  alignment:
+                      msg['isMe']
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 6.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 10.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color:
                           msg['isMe']
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 6),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color: msg['isMe'] ? Colors.blue : Colors.grey[300],
-                          borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(16),
-                            topRight: const Radius.circular(16),
-                            bottomLeft: Radius.circular(msg['isMe'] ? 16 : 0),
-                            bottomRight: Radius.circular(msg['isMe'] ? 0 : 16),
+                              ? Theme.of(context).colorScheme.surfaceVariant
+                              : const Color(0xFFD30579).withOpacity(0.2),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16.r),
+                        topRight: Radius.circular(16.r),
+                        bottomLeft: Radius.circular(msg['isMe'] ? 16.r : 0),
+                        bottomRight: Radius.circular(msg['isMe'] ? 0 : 16.r),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment:
+                          msg['isMe']
+                              ? CrossAxisAlignment.end
+                              : CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          msg['text'],
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
-                        child: Column(
-                          crossAxisAlignment:
-                              msg['isMe']
-                                  ? CrossAxisAlignment.end
-                                  : CrossAxisAlignment.start,
+                        SizedBox(height: 4.h),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              msg['text'],
-                              style: TextStyle(
-                                color:
-                                    msg['isMe'] ? Colors.white : Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
                             Text(
                               "${msg['time'].hour.toString().padLeft(2, '0')}:${msg['time'].minute.toString().padLeft(2, '0')}",
                               style: TextStyle(
-                                color:
-                                    msg['isMe']
-                                        ? Colors.white70
-                                        : Colors.black54,
-                                fontSize: 10,
+                                fontSize: 10.sp,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withOpacity(0.6),
                               ),
                             ),
+                            if (msg['isMe']) ...[
+                              SizedBox(width: 4.w),
+                              Icon(
+                                Icons.done_all,
+                                size: 14.sp,
+                                color:
+                                    (msg['isRead'] ?? false)
+                                        ? Colors.green
+                                        : Colors.grey,
+                              ),
+                            ],
                           ],
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 );
               },
             ),
           ),
-          const Divider(height: 1),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _controller,
                     focusNode: _focusNode,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'Type a message...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 20.w,
+                        vertical: 14.h,
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40.r),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 0.5,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: _sendMessage,
-                  icon: const Icon(Icons.send, color: Colors.blue),
+                SizedBox(width: 8.w),
+                Container(
+                  height: 50.h,
+                  width: 50.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.r),
+                    border: Border.all(color: Colors.grey, width: 2),
+                    color: Colors.white,
+                  ),
+                  child: IconButton(
+                    onPressed: _sendMessage,
+                    splashRadius: 34,
+                    icon: ShaderMask(
+                      shaderCallback:
+                          (bounds) => const LinearGradient(
+                            colors: [Color(0xFFFAB558), Color(0xFFD30579)],
+                            begin: Alignment.bottomRight,
+                            end: Alignment.topLeft,
+                          ).createShader(
+                            Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+                          ),
+                      child: Transform.rotate(
+                        angle: 315 * math.pi / 180,
+                        child: const Icon(Icons.send, color: Colors.white),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
+          SizedBox(height: 30.h),
         ],
       ),
     );

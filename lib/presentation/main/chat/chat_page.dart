@@ -65,9 +65,26 @@ class ChatTile extends StatelessWidget {
         );
       },
       contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
-      leading: CircleAvatar(
-        radius: 28,
-        backgroundImage: NetworkImage(imageUrl),
+      leading: Container(
+        padding: const EdgeInsets.all(2),
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+            colors: [Color(0xFFFAB558), Color(0xFFD30579)],
+          ),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(2.5),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+          ),
+          child: CircleAvatar(
+            radius: 24,
+            backgroundImage: NetworkImage(imageUrl),
+            backgroundColor: Colors.white,
+          ),
+        ),
       ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
