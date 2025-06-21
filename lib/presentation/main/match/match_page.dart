@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:crew_match/presentation/main/home/user_detailed_home_page.dart';
+import 'package:crew_match/presentation/widget/match_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -18,6 +20,9 @@ class _MatchScreenState extends State<MatchScreen> {
       'age': '25',
       'image':
           'https://i.pinimg.com/736x/7e/33/57/7e3357cfb8ee9bf31cf2a5b427b50a92.jpg',
+      'bio': 'Emma loves sailing and the ocean breeze.',
+      'company': 'Blue Horizon',
+      'ship': 'SS Liberty',
       'date': DateTime.now(),
     },
     {
@@ -25,6 +30,9 @@ class _MatchScreenState extends State<MatchScreen> {
       'age': '22',
       'image':
           'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=800&q=80',
+      'bio': 'Mia is an adventurer and marine biologist.',
+      'company': 'Aqua Research',
+      'ship': 'SS Neptune',
       'date': DateTime.now(),
     },
     {
@@ -32,6 +40,9 @@ class _MatchScreenState extends State<MatchScreen> {
       'age': '27',
       'image':
           'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=800&q=80',
+      'bio': 'Liam enjoys songwriting and star-gazing on deck.',
+      'company': 'MarineX',
+      'ship': 'SS Voyager',
       'date': DateTime.now().subtract(const Duration(days: 1)),
     },
   ];
@@ -63,22 +74,22 @@ class _MatchScreenState extends State<MatchScreen> {
 
   Widget _buildSectionHeader(String title) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.h),
+      padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
         children: [
-          Expanded(child: Divider(color: Colors.grey.shade400, thickness: 1)),
+          Expanded(child: Divider(color: Colors.grey.shade300, thickness: 0.8)),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w),
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
             child: Text(
               title,
               style: TextStyle(
-                color: Colors.black54,
+                color: Colors.grey.shade700,
                 fontWeight: FontWeight.w600,
-                fontSize: 14.sp,
+                fontSize: 16.sp,
               ),
             ),
           ),
-          Expanded(child: Divider(color: Colors.grey.shade400, thickness: 1)),
+          Expanded(child: Divider(color: Colors.grey.shade300, thickness: 0.8)),
         ],
       ),
     );
@@ -121,17 +132,9 @@ class _MatchScreenState extends State<MatchScreen> {
                                               ? MainAxisAlignment.start
                                               : MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        _buildMatchCard(
-                                          imageUrl: first['image'],
-                                          name: first['name'],
-                                          age: first['age'],
-                                        ),
+                                        MatchCardWidget(profile: first),
                                         if (second != null)
-                                          _buildMatchCard(
-                                            imageUrl: second['image'],
-                                            name: second['name'],
-                                            age: second['age'],
-                                          ),
+                                          MatchCardWidget(profile: second),
                                       ],
                                     ),
                                   );
@@ -167,61 +170,6 @@ class _MatchScreenState extends State<MatchScreen> {
                   ],
                 ),
               ),
-    );
-  }
-
-  Widget _buildMatchCard({
-    required String imageUrl,
-    required String name,
-    required String age,
-  }) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16.r),
-      child: SizedBox(
-        width: 150.w,
-        height: 200.h,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder:
-                    (context, error, stackTrace) => Container(
-                      color: Colors.grey,
-                      child: const Icon(Icons.error, color: Colors.red),
-                    ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(16.r),
-                  bottomRight: Radius.circular(16.r),
-                ),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-                  child: Container(
-                    width: double.infinity,
-                    color: Colors.black.withOpacity(0.4),
-                    padding: EdgeInsets.symmetric(vertical: 8.h),
-                    child: Text(
-                      '$name, $age',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
