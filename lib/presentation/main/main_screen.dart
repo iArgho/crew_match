@@ -1,6 +1,7 @@
 import 'package:crew_match/presentation/main/chat/chat_page.dart';
 import 'package:crew_match/presentation/main/home/home_page.dart';
 import 'package:crew_match/presentation/main/match/match_page.dart';
+import 'package:crew_match/presentation/main/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -31,6 +32,17 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
+  String _getAppBarTitle() {
+    switch (_currentIndex) {
+      case 1:
+        return 'Match';
+      case 2:
+        return 'Chats';
+      default:
+        return 'Argho!';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +62,7 @@ class _MainPageState extends State<MainPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Argho!',
+                  _getAppBarTitle(),
                   style: TextStyle(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w500,
@@ -62,11 +74,16 @@ class _MainPageState extends State<MainPage> {
                     IconButton(
                       icon: const Icon(Icons.notifications_none),
                       color: Colors.black87,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const NotificationScreen(),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(width: 4.w),
-
-                    // Avatar with fallback gradient
                     FutureBuilder<bool>(
                       future: _assetExists('assets/images/samplepice.jpg'),
                       builder: (context, snapshot) {

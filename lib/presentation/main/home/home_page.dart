@@ -9,6 +9,16 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, String>> people = [
       {
+        'name': 'Liam',
+        'age': '28',
+        'image':
+            'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=800&q=80',
+        'bio':
+            'Music is life for Liam. He plays guitar in a band and writes his own songs.',
+        'company': 'MarineX',
+        'ship': 'SS Voyager',
+      },
+      {
         'name': 'Emma',
         'age': '25',
         'image':
@@ -27,16 +37,6 @@ class HomeScreen extends StatelessWidget {
             'Always smiling and full of energy. She thrives in social settings and loves dancing, art, and volunteering for good causes.',
         'company': 'AquaTech Ltd.',
         'ship': 'MV Ocean Pearl',
-      },
-      {
-        'name': 'Liam',
-        'age': '28',
-        'image':
-            'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=800&q=80',
-        'bio':
-            'Music is life for Liam. He plays guitar in a band and writes his own songs.',
-        'company': 'MarineX',
-        'ship': 'SS Voyager',
       },
     ];
 
