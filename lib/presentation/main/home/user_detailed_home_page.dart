@@ -1,3 +1,4 @@
+import 'package:crew_match/presentation/main/match/match_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -109,25 +110,42 @@ class UserDetailedHomePage extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(width: 12.w),
-                                Container(
-                                  padding: EdgeInsets.all(8.w),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: ShaderMask(
-                                    shaderCallback:
-                                        (bounds) => const LinearGradient(
-                                          colors: [
-                                            Color(0xFFD30579),
-                                            Color(0xFFFAB558),
-                                          ],
-                                        ).createShader(bounds),
-                                    blendMode: BlendMode.srcIn,
-                                    child: Icon(
-                                      Icons.favorite,
-                                      size: 45.sp,
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (_) => MatchScreen(
+                                              matchName: 'Liam',
+                                              matchImageUrl:
+                                                  'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=800&q=80',
+                                              myImageUrl:
+                                                  'https://img.freepik.com/free-photo/business-young-woman-looking-camera-office_1301-6423.jpg',
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(8.w),
+                                    decoration: const BoxDecoration(
                                       color: Colors.white,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: ShaderMask(
+                                      shaderCallback:
+                                          (bounds) => const LinearGradient(
+                                            colors: [
+                                              Color(0xFFD30579),
+                                              Color(0xFFFAB558),
+                                            ],
+                                          ).createShader(bounds),
+                                      blendMode: BlendMode.srcIn,
+                                      child: Icon(
+                                        Icons.favorite,
+                                        size: 45.sp,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),

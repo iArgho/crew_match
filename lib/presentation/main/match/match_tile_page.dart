@@ -1,19 +1,17 @@
-import 'dart:ui';
-import 'package:crew_match/presentation/main/home/user_detailed_home_page.dart';
 import 'package:crew_match/presentation/widget/match_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MatchScreen extends StatefulWidget {
+class MatchTileScreen extends StatefulWidget {
   final bool hasMatches;
 
-  const MatchScreen({super.key, this.hasMatches = true});
+  const MatchTileScreen({super.key, this.hasMatches = true});
 
   @override
-  State<MatchScreen> createState() => _MatchScreenState();
+  State<MatchTileScreen> createState() => _MatchScreenState();
 }
 
-class _MatchScreenState extends State<MatchScreen> {
+class _MatchScreenState extends State<MatchTileScreen> {
   final List<Map<String, dynamic>> profiles = [
     {
       'name': 'Emma',
@@ -26,11 +24,11 @@ class _MatchScreenState extends State<MatchScreen> {
       'date': DateTime.now(),
     },
     {
-      'name': 'Mia',
-      'age': '22',
+      'name': 'Sofia',
+      'age': '27',
       'image':
-          'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=800&q=80',
-      'bio': 'Mia is an adventurer and marine biologist.',
+          'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=800&q=80',
+      'bio': 'Sofia is a curious explorer of the deep sea.',
       'company': 'Aqua Research',
       'ship': 'SS Neptune',
       'date': DateTime.now(),
@@ -74,7 +72,7 @@ class _MatchScreenState extends State<MatchScreen> {
 
   Widget _buildSectionHeader(String title) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Row(
         children: [
           Expanded(child: Divider(color: Colors.grey.shade300, thickness: 0.8)),
@@ -100,7 +98,7 @@ class _MatchScreenState extends State<MatchScreen> {
     final groupedProfiles = groupProfilesByDate();
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
       child:
           widget.hasMatches
               ? SingleChildScrollView(
@@ -125,16 +123,24 @@ class _MatchScreenState extends State<MatchScreen> {
                                           : null;
 
                                   return Padding(
-                                    padding: EdgeInsets.only(bottom: 16.h),
+                                    padding: EdgeInsets.only(bottom: 12.h),
                                     child: Row(
                                       mainAxisAlignment:
-                                          second == null
-                                              ? MainAxisAlignment.start
-                                              : MainAxisAlignment.spaceEvenly,
+                                          second != null
+                                              ? MainAxisAlignment.center
+                                              : MainAxisAlignment.start,
                                       children: [
-                                        MatchCardWidget(profile: first),
+                                        MatchCardWidget(
+                                          profile: first,
+                                          margin: EdgeInsets.only(
+                                            right: second != null ? 8.w : 0,
+                                          ),
+                                        ),
                                         if (second != null)
-                                          MatchCardWidget(profile: second),
+                                          MatchCardWidget(
+                                            profile: second,
+                                            margin: EdgeInsets.only(left: 8.w),
+                                          ),
                                       ],
                                     ),
                                   );

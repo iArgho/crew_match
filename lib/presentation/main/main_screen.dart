@@ -1,6 +1,6 @@
 import 'package:crew_match/presentation/main/chat/chat_page.dart';
 import 'package:crew_match/presentation/main/home/home_page.dart';
-import 'package:crew_match/presentation/main/match/match_page.dart';
+import 'package:crew_match/presentation/main/match/match_tile_page.dart';
 import 'package:crew_match/presentation/main/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,7 +18,7 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> _screens = const [
     HomeScreen(),
-    MatchScreen(),
+    MatchTileScreen(),
     ChatScreen(),
   ];
 
