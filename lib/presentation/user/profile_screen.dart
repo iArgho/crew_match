@@ -1,5 +1,6 @@
 import 'package:crew_match/presentation/auth/createaccout/personal_details_screen.dart';
 import 'package:crew_match/presentation/auth/createaccout/upload_photos_screen.dart';
+import 'package:crew_match/presentation/settings/setting_screens.dart';
 import 'package:crew_match/presentation/user/privecy_mode.dart';
 import 'package:crew_match/presentation/user/subscription_screen.dart';
 import 'package:flutter/material.dart';
@@ -91,10 +92,13 @@ class ProfileScreen extends StatelessWidget {
                 Get.off(() => PersonalDetailsScreen());
               },
             ),
-            const ListTile(
-              leading: Icon(Icons.settings),
-              title: Text("Settings"),
-              trailing: Icon(Icons.arrow_forward_ios, size: 16),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text("Settings"),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              onTap: () {
+                Get.off(() => SettingScreens());
+              },
             ),
             const ListTile(
               leading: Icon(Icons.logout, color: Colors.red),
