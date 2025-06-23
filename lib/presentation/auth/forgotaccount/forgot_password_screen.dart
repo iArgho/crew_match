@@ -35,56 +35,71 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Get.off(() => SigninScreen());
+            Get.off(() => const SigninScreen());
           },
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.w),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 16.h),
-              Text(
-                'Forgot Your Password?',
-                style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                'Please enter your registered Email & we will send an OTP code to reset your password.',
-                style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
-              ),
-              SizedBox(height: 24.h),
-              Text('Email', style: TextStyle(fontSize: 16.sp)),
-              SizedBox(height: 8.h),
-              TextFormField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                autofillHints: const [AutofillHints.email],
-                decoration: const InputDecoration(
-                  hintText: 'Enter your Email',
-                  border: OutlineInputBorder(),
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
+
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 32.h),
+
+                Text(
+                  'Forgot Your Password?',
+                  style: TextStyle(
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    return 'Enter your Email';
-                  }
-                  if (!text.contains('@') || !text.contains('.')) {
-                    return 'Enter a valid Email';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 24.h),
-              TextWidgetButton(
-                text: 'Get OTP',
-                onPressed: () {
-                  Get.off(() => OtpVerificationScreen());
-                },
-              ),
-            ],
+
+                SizedBox(height: 8.h),
+
+                Text(
+                  'Please enter your registered Email & we will send an OTP code to reset your password.',
+                  style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
+                ),
+
+                SizedBox(height: 32.h),
+
+                Text('Email', style: TextStyle(fontSize: 16.sp)),
+                SizedBox(height: 8.h),
+
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  autofillHints: const [AutofillHints.email],
+                  decoration: const InputDecoration(
+                    hintText: 'Enter your Email',
+                  ),
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
+                      return 'Enter your Email';
+                    }
+                    if (!text.contains('@') || !text.contains('.')) {
+                      return 'Enter a valid Email';
+                    }
+                    return null;
+                  },
+                ),
+
+                SizedBox(height: 104.h),
+
+                TextWidgetButton(
+                  text: 'Get OTP',
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      Get.off(() => const OtpVerificationScreen());
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

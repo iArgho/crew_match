@@ -101,8 +101,11 @@ class _SigninScreenState extends State<SigninScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Checkbox(
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           value: rememberMe,
                           onChanged: (value) {
                             setState(() {
@@ -126,10 +129,16 @@ class _SigninScreenState extends State<SigninScreen> {
                           ),
                           checkColor: Colors.white,
                         ),
+                        const SizedBox(width: 4),
                         const Text('Remember Password'),
                       ],
                     ),
                     TextButton(
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size(0, 0),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
                       onPressed: () {
                         Get.off(() => const ForgotPasswordScreen());
                       },
@@ -141,7 +150,7 @@ class _SigninScreenState extends State<SigninScreen> {
                   ],
                 ),
 
-                SizedBox(height: 16.h),
+                SizedBox(height: 40.h),
 
                 TextWidgetButton(
                   text: 'Sign In',
@@ -150,7 +159,7 @@ class _SigninScreenState extends State<SigninScreen> {
                   },
                 ),
 
-                SizedBox(height: 24.h),
+                SizedBox(height: 16.h),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

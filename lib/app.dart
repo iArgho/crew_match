@@ -60,7 +60,6 @@ class CrewMatch extends StatelessWidget {
               hintStyle: TextStyle(fontSize: 14.sp),
             ),
 
-            // Added white AppBar theme:
             appBarTheme: AppBarTheme(
               backgroundColor: Colors.white,
               elevation: 0,
