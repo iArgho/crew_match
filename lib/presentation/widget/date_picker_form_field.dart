@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class DatePickerFormField extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final Function(DateTime?)? onDateSelected;
+  final InputDecoration? decoration;
+  final String? Function(String?)? validator;
 
   const DatePickerFormField({
     super.key,
     required this.controller,
     this.hintText = 'Select a date',
     this.onDateSelected,
+    this.decoration,
+    this.validator,
   });
 
   @override
@@ -22,12 +27,12 @@ class _DatePickerFormFieldState extends State<DatePickerFormField> {
     DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime(2000),
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: Color(0xFFD30579),
               onPrimary: Colors.white,
               onSurface: Colors.black,
@@ -35,7 +40,7 @@ class _DatePickerFormFieldState extends State<DatePickerFormField> {
             dialogBackgroundColor: Colors.white,
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                foregroundColor: Color(0xFFD30579), // Button text color
+                foregroundColor: const Color(0xFFD30579),
               ),
             ),
           ),
@@ -50,26 +55,33 @@ class _DatePickerFormFieldState extends State<DatePickerFormField> {
     }
   }
 
+  InputDecoration _inputDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5.r),
+        borderSide: const BorderSide(color: Colors.grey),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5.r),
+        borderSide: const BorderSide(color: Color(0xFFD30579), width: 2),
+      ),
+      hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey.shade600),
+      suffixIcon: const Icon(Icons.calendar_today, color: Color(0xFFD30579)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
       readOnly: true,
       onTap: _pickDate,
-      decoration: InputDecoration(
-        hintText: widget.hintText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0), // Slightly square corners
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(color: Color(0xFFD30579)), // Pink focus border
-        ),
-        suffixIcon: const Icon(Icons.calendar_today, color: Color(0xFFD30579)),
-      ),
+      decoration: widget.decoration ?? _inputDecoration(widget.hintText),
+      validator: widget.validator,
     );
   }
 }

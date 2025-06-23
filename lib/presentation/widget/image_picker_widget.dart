@@ -24,30 +24,97 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   File? _pickedFile;
 
   Future<void> _pickImage() async {
-    var permissionStatus = await Permission.photos.request();
+    // Request photo permission
+    final permissionStatus = await _requestPhotoPermission();
     if (!permissionStatus.isGranted) {
-      print("Permission denied");
+      _showPermissionDeniedDialog();
       return;
     }
 
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    try {
+      final picker = ImagePicker();
+      final pickedImage = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80, // Compress image to reduce size
+      );
 
-    if (pickedImage != null) {
-      setState(() {
-        _pickedFile = File(pickedImage.path);
-      });
-      widget.onPick(widget.index);
-    } else {
-      print("No image selected");
+      if (pickedImage != null && mounted) {
+        setState(() {
+          _pickedFile = File(pickedImage.path);
+        });
+        widget.onPick(widget.index);
+      } else {
+        print("No image selected");
+      }
+    } catch (e) {
+      print("Error picking image: $e");
+      if (mounted) {
+        _showErrorDialog("Failed to pick image. Please try again.");
+      }
     }
   }
 
+  Future<PermissionStatus> _requestPhotoPermission() async {
+    if (Platform.isIOS) {
+      return await Permission.photos.request();
+    } else {
+      // For Android, handle different permissions based on version
+      final status = await Permission.storage.request();
+      if (status.isGranted) return status;
+      return await Permission.photos.request();
+    }
+  }
+
+  void _showPermissionDeniedDialog() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text("Permission Denied"),
+            content: const Text(
+              "Please grant photo access to select images. You can enable it in settings.",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  openAppSettings();
+                },
+                child: const Text("Open Settings"),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text("Error"),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+    );
+  }
+
   void _removeImage() {
-    setState(() {
-      _pickedFile = null;
-    });
-    widget.onRemove(widget.index);
+    if (mounted) {
+      setState(() {
+        _pickedFile = null;
+      });
+      widget.onRemove(widget.index);
+    }
   }
 
   @override

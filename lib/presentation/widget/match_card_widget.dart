@@ -6,7 +6,6 @@ import 'package:crew_match/presentation/main/home/user_detailed_home_page.dart';
 class MatchCardWidget extends StatelessWidget {
   final Map<String, dynamic> profile;
 
-  // ✅ Add margin/padding as optional parameters
   final EdgeInsetsGeometry margin;
   final EdgeInsetsGeometry padding;
 

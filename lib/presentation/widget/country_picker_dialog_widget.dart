@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CountryPickerDialogWidget extends StatefulWidget {
   final List<String> allCountries;
   final List<String> bannedNationalities;
-  final Function(List<String>) onCountriesSelected; // multiple countries
+  final Function(List<String>) onCountriesSelected;
 
   const CountryPickerDialogWidget({
     super.key,
@@ -51,7 +51,7 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
   }
 
   void _toggleSelection(String country) {
-    if (widget.bannedNationalities.contains(country)) return; // disabled
+    if (widget.bannedNationalities.contains(country)) return;
     setState(() {
       if (_selectedCountries.contains(country)) {
         _selectedCountries.remove(country);
@@ -61,13 +61,33 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
     });
   }
 
+  InputDecoration _inputDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5.r),
+        borderSide: const BorderSide(color: Colors.grey),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5.r),
+        borderSide: const BorderSide(color: Color(0xFFD30579), width: 2),
+      ),
+      hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey.shade600),
+      prefixIcon: const Icon(Icons.search, color: Color(0xFFD30579)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.r), // slightly rounded corners
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+      title: Text(
+        'Select Countries',
+        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
       ),
-      title: const Text('Select Countries'),
       content: SizedBox(
         width: double.maxFinite,
         child: Column(
@@ -75,18 +95,7 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
           children: [
             TextField(
               controller: _searchController,
-              decoration: const InputDecoration(
-                hintText: 'Search country',
-                prefixIcon: Icon(Icons.search, color: Colors.pink),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.pink),
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                ),
-              ),
+              decoration: _inputDecoration('Search country'),
             ),
             SizedBox(height: 12.h),
             SizedBox(
@@ -94,7 +103,12 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
               width: double.maxFinite,
               child:
                   _filteredCountries.isEmpty
-                      ? const Center(child: Text('No countries found'))
+                      ? Center(
+                        child: Text(
+                          'No countries found',
+                          style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                        ),
+                      )
                       : ListView.builder(
                         itemCount: _filteredCountries.length,
                         itemBuilder: (context, index) {
@@ -108,11 +122,14 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
                           return Material(
                             color:
                                 isSelected
-                                    ? Colors.pink.withOpacity(0.1)
+                                    ? const Color(0xFFD30579).withOpacity(0.1)
                                     : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8.r),
+                            borderRadius: BorderRadius.circular(5.r),
                             child: ListTile(
-                              title: Text(country),
+                              title: Text(
+                                country,
+                                style: TextStyle(fontSize: 14.sp),
+                              ),
                               trailing: Icon(
                                 isBanned
                                     ? Icons.block
@@ -123,7 +140,7 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
                                     isBanned
                                         ? Colors.grey
                                         : isSelected
-                                        ? Colors.pink
+                                        ? const Color(0xFFD30579)
                                         : null,
                               ),
                               onTap:
@@ -131,10 +148,10 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
                                       ? null
                                       : () => _toggleSelection(country),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
+                                borderRadius: BorderRadius.circular(5.r),
                               ),
                               contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.w,
+                                horizontal: 12.w,
                                 vertical: 4.h,
                               ),
                             ),
@@ -147,13 +164,20 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context), // cancel closes dialog
-          child: const Text('Cancel'),
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            'Cancel',
+            style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+          ),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.pink,
-            disabledBackgroundColor: Colors.pink.shade100,
+            backgroundColor: const Color(0xFFD30579),
+            disabledBackgroundColor: const Color(0xFFD30579).withOpacity(0.3),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5.r),
+            ),
           ),
           onPressed:
               _selectedCountries.isEmpty
@@ -162,7 +186,10 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
                     Navigator.pop(context);
                     widget.onCountriesSelected(_selectedCountries.toList());
                   },
-          child: const Text('Done'),
+          child: Text(
+            'Done',
+            style: TextStyle(fontSize: 14.sp, color: Colors.white),
+          ),
         ),
       ],
     );
