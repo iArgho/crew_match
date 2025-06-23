@@ -1,3 +1,4 @@
+import 'package:crew_match/presentation/settings/change_password_screen.dart';
 import 'package:crew_match/presentation/settings/privecy_pollicy_screen.dart';
 import 'package:crew_match/presentation/settings/terms_of_service.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,10 @@ class SettingScreens extends StatelessWidget {
             title: const Text("Change Password"),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
-              // Navigate to change password screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ChangePasswordScreen()),
+              );
             },
           ),
           const Divider(),
