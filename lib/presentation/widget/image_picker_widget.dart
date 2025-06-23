@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ImagePickerWidget extends StatefulWidget {
   final int index;
@@ -18,21 +21,31 @@ class ImagePickerWidget extends StatefulWidget {
 }
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
-  String? imageUrl;
+  File? _pickedFile;
 
-  final sampleImage =
-      'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=400&q=80';
+  Future<void> _pickImage() async {
+    var permissionStatus = await Permission.photos.request();
+    if (!permissionStatus.isGranted) {
+      print("Permission denied");
+      return;
+    }
 
-  void _pickImage() {
-    setState(() {
-      imageUrl = sampleImage;
-    });
-    widget.onPick(widget.index);
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      setState(() {
+        _pickedFile = File(pickedImage.path);
+      });
+      widget.onPick(widget.index);
+    } else {
+      print("No image selected");
+    }
   }
 
   void _removeImage() {
     setState(() {
-      imageUrl = null;
+      _pickedFile = null;
     });
     widget.onRemove(widget.index);
   }
@@ -40,7 +53,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: imageUrl == null ? _pickImage : null,
+      onTap: _pickedFile == null ? _pickImage : null,
       child: Container(
         width: 0.28.sw,
         height: 0.18.sh,
@@ -49,9 +62,9 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
           border: Border.all(color: Colors.grey),
           color: Colors.grey[300],
           image:
-              imageUrl != null
+              _pickedFile != null
                   ? DecorationImage(
-                    image: NetworkImage(imageUrl!),
+                    image: FileImage(_pickedFile!),
                     fit: BoxFit.cover,
                   )
                   : null,
@@ -59,7 +72,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            if (imageUrl == null)
+            if (_pickedFile == null)
               Positioned(
                 bottom: -4.r,
                 right: -4.r,
@@ -76,7 +89,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                   ),
                 ),
               ),
-            if (imageUrl != null)
+            if (_pickedFile != null)
               Positioned(
                 bottom: -4.r,
                 right: -4.r,
@@ -85,7 +98,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                   onTap: _removeImage,
                   child: Container(
                     padding: EdgeInsets.all(6.r),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
                     ),

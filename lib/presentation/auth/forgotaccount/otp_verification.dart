@@ -1,5 +1,4 @@
 import 'package:crew_match/presentation/auth/forgotaccount/reset_password_screen.dart';
-import 'package:crew_match/presentation/auth/signin/signin_screen.dart';
 import 'package:crew_match/presentation/widget/text_widget_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,12 +26,13 @@ class _OtpVerificationState extends State<OtpVerificationScreen> {
     super.dispose();
   }
 
-  void _handleSignIn() {
-    String otp = _controllers.map((controller) => controller.text).join();
+  void _handleVerify() {
+    String otp = _controllers.map((c) => c.text).join();
     print("Entered OTP: $otp");
 
     if (otp.length == 6) {
-      print("Valid OTP, proceed with sign-in...");
+      print("Valid OTP, proceeding...");
+      Get.off(() => const ResetPasswordScreen());
     } else {
       print("OTP incomplete");
     }
@@ -40,13 +40,13 @@ class _OtpVerificationState extends State<OtpVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Get.off(() => const SigninScreen());
-          },
+          onPressed: () => Get.back(),
         ),
       ),
       body: Padding(
@@ -55,18 +55,15 @@ class _OtpVerificationState extends State<OtpVerificationScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 16.h),
+            Text('OTP Verification', style: textTheme.titleLarge),
+            SizedBox(height: 8.h),
             Text(
-              'OTP Verification',
-              style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w600),
-            ),
-            Text(
-              "Please Enter the 6-digit verification code sent to example@gmail.com",
-              style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
+              "Please enter the 6-digit verification code sent to example@gmail.com",
+              style: textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),
             ),
             SizedBox(height: 30.h),
 
             Wrap(
-              alignment: WrapAlignment.start,
               spacing: 10.w,
               runSpacing: 10.h,
               children: List.generate(6, (index) {
@@ -77,37 +74,29 @@ class _OtpVerificationState extends State<OtpVerificationScreen> {
 
             Text(
               "The OTP you entered is incorrect, please check again or resend it now.",
-              style: TextStyle(color: Colors.red, fontSize: 14.sp),
+              style: textTheme.bodyMedium?.copyWith(color: Colors.red),
             ),
             SizedBox(height: 10.h),
 
             Row(
               children: [
-                Text(
-                  "Didn't receive the code?",
-                  style: TextStyle(fontSize: 14.sp),
-                ),
+                Text("Didn't receive the code?", style: textTheme.bodyMedium),
                 TextButton(
                   onPressed: () {
                     print("Resend OTP pressed");
-                    // TODO: Implement resend logic
                   },
-                  child: const Text(
+                  child: Text(
                     "Resend Now",
-                    style: TextStyle(color: Colors.blue),
+                    style: textTheme.labelLarge?.copyWith(color: Colors.blue),
                   ),
                 ),
               ],
             ),
             SizedBox(height: 30.h),
-            TextWidgetButton(
-              text: 'Verify',
-              onPressed: () {
-                Get.off(() => const ResetPasswordScreen());
-              },
-            ),
 
-            Spacer(),
+            TextWidgetButton(text: 'Verify', onPressed: _handleVerify),
+
+            const Spacer(),
           ],
         ),
       ),
@@ -125,13 +114,16 @@ class _OtpVerificationState extends State<OtpVerificationScreen> {
         keyboardType: TextInputType.number,
         maxLength: 1,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        decoration: InputDecoration(
+        cursorColor: Colors.grey,
+        decoration: const InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
           counterText: '',
-          enabledBorder: const UnderlineInputBorder(
+          enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey),
           ),
-          focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
           ),
         ),
         onChanged: (value) {

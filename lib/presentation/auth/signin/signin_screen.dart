@@ -18,6 +18,7 @@ class SigninScreen extends StatefulWidget {
 class _SigninScreenState extends State<SigninScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool rememberMe = false;
   bool _obscurePassword = true;
@@ -30,9 +31,12 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 
   void _handleSignIn() {
-    final email = _emailController.text;
-    final password = _passwordController.text;
-    print('Email: $email, Password: $password, Remember: $rememberMe');
+    if (_formKey.currentState?.validate() ?? false) {
+      final email = _emailController.text;
+      final password = _passwordController.text;
+      print('Email: $email, Password: $password, Remember: $rememberMe');
+      Get.off(() => MainPage());
+    }
   }
 
   @override
@@ -43,140 +47,150 @@ class _SigninScreenState extends State<SigninScreen> {
         padding: EdgeInsets.symmetric(horizontal: 24.0.w),
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SvgPicture.asset(
-                  PathUtils.logoColor,
-                  width: 0.7.sw,
-                  semanticsLabel: 'App Logo',
-                ),
-
-                SizedBox(height: 32.h),
-
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text('Email', style: TextStyle(fontSize: 16.sp)),
-                ),
-                SizedBox(height: 8.h),
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  autofillHints: const [AutofillHints.email],
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your Email',
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  SizedBox(height: 90.h),
+                  SvgPicture.asset(
+                    PathUtils.logoColor,
+                    width: 0.7.sw,
+                    semanticsLabel: 'App Logo',
                   ),
-                ),
-
-                SizedBox(height: 16.h),
-
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text('Password', style: TextStyle(fontSize: 16.sp)),
-                ),
-                SizedBox(height: 8.h),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  autofillHints: const [AutofillHints.password],
-                  decoration: InputDecoration(
-                    hintText: 'Enter Password',
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
+                  SizedBox(height: 40.h),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Email', style: TextStyle(fontSize: 16.sp)),
+                  ),
+                  SizedBox(height: 8.h),
+                  TextFormField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    autofillHints: const [AutofillHints.email],
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your Email',
                     ),
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Enter your Email';
+                      }
+                      // Basic email format validation
+                      if (!RegExp(
+                        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                      ).hasMatch(text)) {
+                        return 'Enter a valid email address';
+                      }
+                      return null;
+                    },
                   ),
-                ),
-
-                SizedBox(height: 8.h),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Checkbox(
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                          value: rememberMe,
-                          onChanged: (value) {
-                            setState(() {
-                              rememberMe = value ?? false;
-                            });
-                          },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          fillColor: MaterialStateProperty.resolveWith<Color>((
-                            states,
-                          ) {
-                            if (states.contains(MaterialState.selected)) {
-                              return const Color(0xFFD30579);
-                            }
-                            return Colors.transparent;
-                          }),
-                          side: const BorderSide(
-                            color: Color.fromARGB(255, 135, 132, 134),
-                            width: 2,
-                          ),
-                          checkColor: Colors.white,
+                  SizedBox(height: 16.h),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Password', style: TextStyle(fontSize: 16.sp)),
+                  ),
+                  SizedBox(height: 8.h),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: _obscurePassword,
+                    autofillHints: const [AutofillHints.password],
+                    decoration: InputDecoration(
+                      hintText: 'Enter Password',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
                         ),
-                        const SizedBox(width: 4),
-                        const Text('Remember Password'),
-                      ],
-                    ),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size(0, 0),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      onPressed: () {
-                        Get.off(() => const ForgotPasswordScreen());
-                      },
-                      child: const Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.blue),
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
                       ),
                     ),
-                  ],
-                ),
-
-                SizedBox(height: 40.h),
-
-                TextWidgetButton(
-                  text: 'Sign In',
-                  onPressed: () {
-                    Get.off(() => MainPage());
-                  },
-                ),
-
-                SizedBox(height: 16.h),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Don't have an account? "),
-                    TextButton(
-                      onPressed: () {
-                        Get.off(() => const SignupScreen());
-                      },
-                      child: const Text(
-                        'Register now',
-                        style: TextStyle(color: Colors.blue),
+                    validator: (text) {
+                      if (text == null || text.isEmpty) {
+                        return 'Enter your Password';
+                      }
+                      if (text.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 8.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Checkbox(
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            value: rememberMe,
+                            onChanged: (value) {
+                              setState(() {
+                                rememberMe = value ?? false;
+                              });
+                            },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            fillColor: MaterialStateProperty.resolveWith<Color>(
+                              (states) {
+                                if (states.contains(MaterialState.selected)) {
+                                  return const Color(0xFFD30579);
+                                }
+                                return Colors.transparent;
+                              },
+                            ),
+                            side: const BorderSide(
+                              color: Color.fromARGB(255, 135, 132, 134),
+                              width: 2,
+                            ),
+                            checkColor: Colors.white,
+                          ),
+                          const SizedBox(width: 4),
+                          const Text('Remember Password'),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size(0, 0),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        onPressed: () {
+                          Get.off(() => const ForgotPasswordScreen());
+                        },
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 60.h),
+                  TextWidgetButton(text: 'Sign In', onPressed: _handleSignIn),
+                  SizedBox(height: 20.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Don't have an account? "),
+                      TextButton(
+                        onPressed: () {
+                          Get.off(() => const SignupScreen());
+                        },
+                        child: const Text(
+                          'Register now',
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

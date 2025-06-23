@@ -19,6 +19,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   void _handleGetOtp() {
     if (_formKey.currentState?.validate() ?? false) {
       print("OTP requested for: ${_emailController.text}");
+      // Navigate to OTP screen after validation
+      Get.off(() => const OtpVerificationScreen());
     }
   }
 
@@ -34,14 +36,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Get.off(() => const SigninScreen());
-          },
+          onPressed: () => Get.off(() => const SigninScreen()),
         ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
-
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -49,7 +48,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 32.h),
-
                 Text(
                   'Forgot Your Password?',
                   style: TextStyle(
@@ -57,19 +55,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-
                 SizedBox(height: 8.h),
-
                 Text(
                   'Please enter your registered Email & we will send an OTP code to reset your password.',
                   style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
                 ),
-
                 SizedBox(height: 32.h),
-
                 Text('Email', style: TextStyle(fontSize: 16.sp)),
                 SizedBox(height: 8.h),
-
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -81,23 +74,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     if (text == null || text.isEmpty) {
                       return 'Enter your Email';
                     }
-                    if (!text.contains('@') || !text.contains('.')) {
-                      return 'Enter a valid Email';
+                    // Match email validation with SigninScreen
+                    if (!RegExp(
+                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                    ).hasMatch(text)) {
+                      return 'Enter a valid email address';
                     }
                     return null;
                   },
                 ),
-
                 SizedBox(height: 104.h),
-
-                TextWidgetButton(
-                  text: 'Get OTP',
-                  onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      Get.off(() => const OtpVerificationScreen());
-                    }
-                  },
-                ),
+                TextWidgetButton(text: 'Get OTP', onPressed: _handleGetOtp),
               ],
             ),
           ),

@@ -18,6 +18,8 @@ dependencies:
   otp_text_field: ^1.1.3
   intl: ^0.20.2
   carousel_slider: ^5.1.1
+  image_picker: ^1.1.2
+  permission_handler: ^12.0.0+1
 
 dev_dependencies:
   flutter_test:
@@ -25,10 +27,28 @@ dev_dependencies:
 
   flutter_lints: ^5.0.0
 
+
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/logo_bland.svg
-    - assets/images/logo_Color.svg
-    - assets/fonts/Manrope.ttf
+    - assets/icons/logo_Color.svg
+    - assets/icons/logo_bland.svg
+
+  fonts:
+    - family: manrope
+      fonts:
+        - asset: assets/fonts/manrope/manrope_extra_light.ttf
+          weight: 200
+        - asset: assets/fonts/manrope/manrope_light.ttf
+          weight: 300
+        - asset: assets/fonts/manrope/manrope_regular.ttf
+          weight: 400
+        - asset: assets/fonts/manrope/manrope_medium.ttf
+          weight: 500
+        - asset: assets/fonts/manrope/manrope_semi_bold.ttf
+          weight: 600
+        - asset: assets/fonts/manrope/manrope_bold.ttf
+          weight: 700
+        - asset: assets/fonts/manrope/manrope_extra_bold.ttf
+          weight: 800
