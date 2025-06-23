@@ -80,11 +80,7 @@ class _MatchScreenState extends State<MatchTileScreen> {
             padding: EdgeInsets.symmetric(horizontal: 8.w),
             child: Text(
               title,
-              style: TextStyle(
-                color: Colors.grey.shade700,
-                fontWeight: FontWeight.w600,
-                fontSize: 16.sp,
-              ),
+              style: TextStyle(color: Colors.grey.shade700, fontSize: 14.sp),
             ),
           ),
           Expanded(child: Divider(color: Colors.grey.shade300, thickness: 0.8)),

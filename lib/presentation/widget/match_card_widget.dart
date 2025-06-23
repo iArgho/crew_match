@@ -40,8 +40,7 @@ class MatchCardWidget extends StatelessWidget {
         padding: padding,
         width: 160.w,
         child: AspectRatio(
-          aspectRatio:
-              3 / 4, // ✅ Maintains consistent card size (e.g., 150x200)
+          aspectRatio: 3 / 4,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16.r),
             child: Stack(
@@ -70,14 +69,19 @@ class MatchCardWidget extends StatelessWidget {
                         width: double.infinity,
                         color: Colors.black.withOpacity(0.3),
                         padding: EdgeInsets.symmetric(vertical: 8.h),
-                        child: Text(
-                          '${profile['name']}, ${profile['age']}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textAlign: TextAlign.center,
+                        child: Row(
+                          children: [
+                            SizedBox(width: 15.w),
+                            Text(
+                              '${profile['name']}, ${profile['age']}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ],
                         ),
                       ),
                     ),
