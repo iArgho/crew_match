@@ -2,6 +2,7 @@ import 'package:crew_match/presentation/main/chat/chat_page.dart';
 import 'package:crew_match/presentation/main/home/home_page.dart';
 import 'package:crew_match/presentation/main/match/match_tile_page.dart';
 import 'package:crew_match/presentation/main/notification_screen.dart';
+import 'package:crew_match/presentation/user/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -84,40 +85,53 @@ class _MainPageState extends State<MainPage> {
                       },
                     ),
                     SizedBox(width: 4.w),
-                    FutureBuilder<bool>(
-                      future: _assetExists('assets/images/samplepice.jpg'),
-                      builder: (context, snapshot) {
-                        final hasImage = snapshot.data ?? false;
-
-                        if (hasImage) {
-                          return CircleAvatar(
-                            radius: 22.r,
-                            backgroundImage: const AssetImage(
-                              'assets/images/samplepice.jpg',
-                            ),
-                          );
-                        } else {
-                          return Container(
-                            width: 44.r,
-                            height: 44.r,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: [Color(0xFFD30579), Color(0xFFFAB558)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                            ),
-                            child: Center(
-                              child: Icon(
-                                Icons.person,
-                                size: 24.sp,
-                                color: Colors.white,
-                              ),
-                            ),
-                          );
-                        }
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfileScreen(),
+                          ),
+                        );
                       },
+                      child: FutureBuilder<bool>(
+                        future: _assetExists('assets/images/samplepice.jpg'),
+                        builder: (context, snapshot) {
+                          final hasImage = snapshot.data ?? false;
+
+                          if (hasImage) {
+                            return CircleAvatar(
+                              radius: 22.r,
+                              backgroundImage: const AssetImage(
+                                'assets/images/samplepice.jpg',
+                              ),
+                            );
+                          } else {
+                            return Container(
+                              width: 44.r,
+                              height: 44.r,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color(0xFFD30579),
+                                    Color(0xFFFAB558),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.person,
+                                  size: 24.sp,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),
