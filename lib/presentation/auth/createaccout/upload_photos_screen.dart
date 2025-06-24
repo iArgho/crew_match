@@ -25,7 +25,7 @@ class UploadPhotosScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.w),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -40,31 +40,30 @@ class UploadPhotosScreen extends StatelessWidget {
               style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
             ),
             SizedBox(height: 24.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(
-                3,
-                (index) => ImagePickerWidget(
-                  index: index,
-                  onPick: _pickImage,
-                  onRemove: _removeImage,
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 24.w,
+                mainAxisSpacing: 24.h,
+                childAspectRatio: 1,
+                children: List.generate(
+                  3,
+                  (index) => ImagePickerWidget(
+                    index: index,
+                    onPick: _pickImage,
+                    onRemove: _removeImage,
+                  ),
                 ),
               ),
             ),
             SizedBox(height: 24.h),
-            ImagePickerWidget(
-              index: 3,
-              onPick: _pickImage,
-              onRemove: _removeImage,
-            ),
-            const Spacer(),
             TextWidgetButton(
               text: 'Next',
               onPressed: () {
                 print("Next pressed");
               },
             ),
-            SizedBox(height: 50.h),
+            SizedBox(height: 16.h),
           ],
         ),
       ),

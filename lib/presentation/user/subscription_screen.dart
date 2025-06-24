@@ -1,9 +1,16 @@
+import 'package:crew_match/presentation/widget/text_widget_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
-class SubscriptionScreen extends StatelessWidget {
+class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
+
+  @override
+  State<SubscriptionScreen> createState() => _SubscriptionScreenState();
+}
+
+class _SubscriptionScreenState extends State<SubscriptionScreen> {
+  int selectedIndex = 0;
 
   void _showBottomSheet(BuildContext context, String price) {
     showModalBottomSheet(
@@ -17,8 +24,6 @@ class SubscriptionScreen extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.lock, size: 40.sp, color: const Color(0xFFD30579)),
-                SizedBox(height: 12.h),
                 Text(
                   'All personal and payment data are protected with advanced encryption. '
                   'By continuing, you confirm that you’ve read and accepted.',
@@ -26,22 +31,9 @@ class SubscriptionScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 14.sp, color: Colors.grey),
                 ),
                 SizedBox(height: 20.h),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFD30579),
-                      padding: EdgeInsets.symmetric(vertical: 14.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.r),
-                      ),
-                    ),
-                    child: Text(
-                      'Continue – $price Total',
-                      style: TextStyle(fontSize: 16.sp, color: Colors.white),
-                    ),
-                  ),
+                TextWidgetButton(
+                  text: 'Continue – $price',
+                  onPressed: () => Navigator.pop(context),
                 ),
               ],
             ),
@@ -68,17 +60,14 @@ class SubscriptionScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Subscribe",
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
-        ),
+        title: Text("Subscription", style: TextStyle(fontSize: 18.sp)),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -98,54 +87,83 @@ class SubscriptionScreen extends StatelessWidget {
             ),
             SizedBox(height: 12.h),
             SizedBox(
-              height: 160.h,
+              height: 170.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: plans.length,
                 separatorBuilder: (_, __) => SizedBox(width: 16.w),
                 itemBuilder: (context, index) {
                   final plan = plans[index];
+                  final isSelected = index == selectedIndex;
+
                   return GestureDetector(
-                    onTap: () => _showBottomSheet(context, plan['total']!),
+                    onTap: () {
+                      setState(() => selectedIndex = index);
+                      Future.delayed(Duration.zero, () {
+                        _showBottomSheet(context, plan['total']!);
+                      });
+                    },
                     child: Container(
                       width: 220.w,
-                      padding: EdgeInsets.all(16.w),
+                      padding: EdgeInsets.all(2),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFD30579).withOpacity(0.05),
-                        borderRadius: BorderRadius.circular(16.r),
-                        //border: const BorderSide(color: Color(0xFFD30579)),
+                        gradient:
+                            isSelected
+                                ? LinearGradient(
+                                  colors: [
+                                    Color(0xFFD30579),
+                                    Color(0xFFFAB558),
+                                  ],
+                                )
+                                : null,
+                        borderRadius: BorderRadius.circular(18.r),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Chip(
-                            label: Text(
-                              plan['tag']!,
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: Colors.white,
+                      child: Container(
+                        padding: EdgeInsets.all(16.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16.r),
+                          border:
+                              isSelected
+                                  ? null
+                                  : Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: Stack(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: isSelected ? 8.h : 12.h),
+                                Text(
+                                  plan['duration']!,
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: 8.h),
+                                Text(
+                                  plan['price']!,
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (isSelected)
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Icon(
+                                  Icons.check,
+                                  color: Color(0xFFD30579),
+                                  size: 24.sp,
+                                ),
                               ),
-                            ),
-                            backgroundColor: const Color(0xFFD30579),
-                            padding: EdgeInsets.symmetric(horizontal: 8.w),
-                          ),
-                          SizedBox(height: 12.h),
-                          Text(
-                            plan['duration']!,
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(height: 8.h),
-                          Text(
-                            plan['price']!,
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   );

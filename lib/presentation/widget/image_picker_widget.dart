@@ -24,7 +24,6 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   File? _pickedFile;
 
   Future<void> _pickImage() async {
-    // Request photo permission
     final permissionStatus = await _requestPhotoPermission();
     if (!permissionStatus.isGranted) {
       _showPermissionDeniedDialog();
@@ -35,7 +34,7 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       final picker = ImagePicker();
       final pickedImage = await picker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: 80, // Compress image to reduce size
+        imageQuality: 80,
       );
 
       if (pickedImage != null && mounted) {
@@ -58,7 +57,6 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     if (Platform.isIOS) {
       return await Permission.photos.request();
     } else {
-      // For Android, handle different permissions based on version
       final status = await Permission.storage.request();
       if (status.isGranted) return status;
       return await Permission.photos.request();
@@ -122,8 +120,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     return GestureDetector(
       onTap: _pickedFile == null ? _pickImage : null,
       child: Container(
-        width: 0.28.sw,
-        height: 0.18.sh,
+        width: 0.4.sw,
+        height: 0.4.sw,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(color: Colors.grey),

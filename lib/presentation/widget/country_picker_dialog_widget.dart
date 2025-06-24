@@ -18,6 +18,19 @@ class CountryPickerDialogWidget extends StatefulWidget {
       _CountryPickerDialogWidgetState();
 }
 
+// Country name → ISO Alpha-2 Code
+const Map<String, String> countryCodeMap = {
+  'Bangladesh': 'bd',
+  'India': 'in',
+  'United States': 'us',
+  'Canada': 'ca',
+  'Australia': 'au',
+  'Germany': 'de',
+  'Japan': 'jp',
+  'France': 'fr',
+  'Brazil': 'br',
+};
+
 class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
   final TextEditingController _searchController = TextEditingController();
   List<String> _filteredCountries = [];
@@ -61,6 +74,11 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
     });
   }
 
+  String getFlagEmoji(String countryName) {
+    final code = countryCodeMap[countryName]?.toUpperCase() ?? '';
+    return String.fromCharCodes(code.codeUnits.map((c) => 0x1F1E6 - 65 + c));
+  }
+
   InputDecoration _inputDecoration(String hint) {
     return InputDecoration(
       hintText: hint,
@@ -69,14 +87,14 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
       contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.r),
-        borderSide: const BorderSide(color: Colors.grey),
+        borderSide: const BorderSide(color: Colors.red),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.r),
-        borderSide: const BorderSide(color: Color(0xFFD30579), width: 2),
+        borderSide: const BorderSide(color: Colors.red, width: 2),
       ),
-      hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey.shade600),
-      prefixIcon: const Icon(Icons.search, color: Color(0xFFD30579)),
+      hintStyle: TextStyle(fontSize: 14.sp, color: Colors.red),
+      prefixIcon: const Icon(Icons.search, color: Colors.red),
     );
   }
 
@@ -86,7 +104,11 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       title: Text(
         'Select Countries',
-        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+        style: TextStyle(
+          fontSize: 18.sp,
+          fontWeight: FontWeight.w600,
+          color: Colors.red,
+        ),
       ),
       content: SizedBox(
         width: double.maxFinite,
@@ -96,6 +118,7 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
             TextField(
               controller: _searchController,
               decoration: _inputDecoration('Search country'),
+              style: TextStyle(color: Colors.red),
             ),
             SizedBox(height: 12.h),
             SizedBox(
@@ -106,7 +129,7 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
                       ? Center(
                         child: Text(
                           'No countries found',
-                          style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                          style: TextStyle(fontSize: 14.sp, color: Colors.red),
                         ),
                       )
                       : ListView.builder(
@@ -122,13 +145,28 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
                           return Material(
                             color:
                                 isSelected
-                                    ? const Color(0xFFD30579).withOpacity(0.1)
+                                    ? Colors.red.withOpacity(0.1)
                                     : Colors.transparent,
                             borderRadius: BorderRadius.circular(5.r),
                             child: ListTile(
-                              title: Text(
-                                country,
-                                style: TextStyle(fontSize: 14.sp),
+                              title: Row(
+                                children: [
+                                  Text(
+                                    getFlagEmoji(country),
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Text(
+                                    country,
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
                               ),
                               trailing: Icon(
                                 isBanned
@@ -140,8 +178,8 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
                                     isBanned
                                         ? Colors.grey
                                         : isSelected
-                                        ? const Color(0xFFD30579)
-                                        : null,
+                                        ? Colors.red
+                                        : Colors.red,
                               ),
                               onTap:
                                   isBanned
@@ -167,13 +205,13 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
           onPressed: () => Navigator.pop(context),
           child: Text(
             'Cancel',
-            style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+            style: TextStyle(fontSize: 14.sp, color: Colors.red),
           ),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFD30579),
-            disabledBackgroundColor: const Color(0xFFD30579).withOpacity(0.3),
+            backgroundColor: Colors.red,
+            disabledBackgroundColor: Colors.red.withOpacity(0.3),
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.r),

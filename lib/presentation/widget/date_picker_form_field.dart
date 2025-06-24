@@ -33,15 +33,13 @@ class _DatePickerFormFieldState extends State<DatePickerFormField> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFFD30579),
+              primary: Colors.red,
               onPrimary: Colors.white,
               onSurface: Colors.black,
             ),
             dialogBackgroundColor: Colors.white,
             textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: const Color(0xFFD30579),
-              ),
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
             ),
           ),
           child: child!,
@@ -67,10 +65,10 @@ class _DatePickerFormFieldState extends State<DatePickerFormField> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(5.r),
-        borderSide: const BorderSide(color: Color(0xFFD30579), width: 2),
+        borderSide: const BorderSide(color: Colors.red, width: 2),
       ),
       hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey.shade600),
-      suffixIcon: const Icon(Icons.calendar_today, color: Color(0xFFD30579)),
+      suffixIcon: const Icon(Icons.calendar_today, color: Colors.red),
     );
   }
 

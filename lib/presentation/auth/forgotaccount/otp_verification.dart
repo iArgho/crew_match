@@ -74,11 +74,16 @@ class _OtpVerificationState extends State<OtpVerificationScreen> {
 
             Text(
               "The OTP you entered is incorrect, please check again or resend it now.",
-              style: textTheme.bodyMedium?.copyWith(color: Colors.red),
+              style: textTheme.bodyMedium?.copyWith(
+                color: Colors.red,
+                fontSize: 14.sp,
+              ),
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: 10.h),
 
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Didn't receive the code?", style: textTheme.bodyMedium),
                 TextButton(

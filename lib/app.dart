@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:crew_match/presentation/splash_screen.dart';
-// Import other screens as needed, e.g.:
-// import 'package:crew_match/presentation/home_screen.dart';
 
 class CrewMatch extends StatelessWidget {
   const CrewMatch({super.key});
@@ -37,26 +35,29 @@ class CrewMatch extends StatelessWidget {
         backgroundColor: Colors.white,
       ), // White badges1
       checkboxTheme: CheckboxThemeData(
-        shape:
-            const CircleBorder(), // Circular checkbox (replaces rounded rectangle)
+        shape: const CircleBorder(),
         fillColor: MaterialStateProperty.resolveWith<Color>((states) {
           if (states.contains(MaterialState.selected)) {
-            return const Color(0xFFD30579); // Pink when checked
+            return const Color(0xFFD30579);
           }
-          return Colors.transparent; // Transparent when unchecked
+          return Colors.transparent;
         }),
         side: const BorderSide(
-          color: Color.fromARGB(255, 135, 132, 134), // Grey border
+          color: Color.fromARGB(255, 135, 132, 134),
           width: 2,
         ),
-        checkColor: MaterialStateProperty.all(Colors.white), // White checkmark
-        visualDensity: VisualDensity.compact, // Compact size
+        checkColor: MaterialStateProperty.all(Colors.white),
+        visualDensity: VisualDensity.compact,
       ),
 
-      // Consolidated input decoration theme (replaces getTextFieldDecoration)
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.grey.withOpacity(0.08), // Subtle grey background
+        fillColor: const Color.fromARGB(
+          255,
+          194,
+          194,
+          194,
+        ).withOpacity(0.08), //
         contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5.r),

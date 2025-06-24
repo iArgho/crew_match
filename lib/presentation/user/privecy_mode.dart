@@ -1,3 +1,4 @@
+import 'package:crew_match/presentation/widget/text_widget_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -55,63 +56,55 @@ class PrivacyModeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Privacy Mode",
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
-        ),
+        title: Text("Privacy Mode", style: TextStyle(fontSize: 18.sp)),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+      body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "Hidden Until You're Ready",
-              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w600),
             ),
             SizedBox(height: 12.h),
             Text(
               "Hide your profile from others until you like theirs.",
-              style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+              style: TextStyle(fontSize: 12.sp),
             ),
-            SizedBox(height: 24.h),
-            Text(
-              "\$1 Only",
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFFD30579),
-              ),
-            ),
-            SizedBox(height: 12.h),
-            Text(
-              "Make a one-time payment of only a dollar and enjoy your privacy mode forever.",
-              style: TextStyle(fontSize: 14.sp, color: Colors.grey),
-            ),
-            SizedBox(height: 48.h),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => _showConfirmationBottomSheet(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFD30579),
-                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.r),
-                  ),
-                ),
-                child: Text(
-                  "Activate Privacy Mode – \$1.00",
-                  style: TextStyle(fontSize: 16.sp, color: Colors.white),
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "\$1 Only",
+                      style: TextStyle(
+                        fontSize: 36.sp,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    Text(
+                      "Make a one-time payment of only a dollar\nand enjoy your privacy mode forever.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                    ),
+                  ],
                 ),
               ),
             ),
-            SizedBox(height: 24.h),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.fromLTRB(24.w, 0, 24.w, 24.h),
+        child: TextWidgetButton(
+          text: 'Continue – \$1.00',
+          onPressed: () => _showConfirmationBottomSheet(context),
         ),
       ),
     );

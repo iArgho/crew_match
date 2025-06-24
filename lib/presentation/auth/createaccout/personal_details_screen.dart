@@ -112,6 +112,11 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(color: Colors.black),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       resizeToAvoidBottomInset: true,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
@@ -121,7 +126,6 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
             key: _formKey,
             child: Column(
               children: [
-                SizedBox(height: 64.h),
                 Text(
                   "Personal Details",
                   style: TextStyle(
@@ -137,7 +141,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
                 SizedBox(height: 24.h),
 
-                // Date of Birth
+                /// Date of Birth
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -156,7 +160,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
                 SizedBox(height: 16.h),
 
-                // Gender
+                /// Gender
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Gender", style: TextStyle(fontSize: 16.sp)),
@@ -166,14 +170,14 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   children:
                       ['Male', 'Female'].map((option) {
                         return Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Checkbox(
-                              value: selectedGender == option,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedGender = value! ? option : '';
-                                });
-                              },
+                            Radio<String>(
+                              value: option,
+                              groupValue: selectedGender,
+                              onChanged:
+                                  (value) =>
+                                      setState(() => selectedGender = value!),
                             ),
                             Text(option, style: TextStyle(fontSize: 14.sp)),
                             SizedBox(width: 12.w),
@@ -183,7 +187,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
                 SizedBox(height: 16.h),
 
-                // Short Bio
+                /// Short Bio
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Short Bio", style: TextStyle(fontSize: 16.sp)),
@@ -201,7 +205,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
                 SizedBox(height: 16.h),
 
-                // Company Name
+                /// Company Name
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -236,7 +240,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
                 SizedBox(height: 16.h),
 
-                // Ship Name
+                /// Ship Name
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Ship Name", style: TextStyle(fontSize: 16.sp)),
@@ -267,7 +271,6 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
                 SizedBox(height: 16.h),
 
-                // Gender Preference
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -280,15 +283,15 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   children:
                       ['Male', 'Female', 'Both'].map((option) {
                         return Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Checkbox(
-                              value: selectedGenderPreference == option,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedGenderPreference =
-                                      value! ? option : '';
-                                });
-                              },
+                            Radio<String>(
+                              value: option,
+                              groupValue: selectedGenderPreference,
+                              onChanged:
+                                  (value) => setState(
+                                    () => selectedGenderPreference = value!,
+                                  ),
                             ),
                             Text(option, style: TextStyle(fontSize: 14.sp)),
                             SizedBox(width: 12.w),
@@ -298,12 +301,18 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
                 SizedBox(height: 16.h),
 
-                // Age Preference
+                /// Age Preference
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Age Preference",
-                    style: TextStyle(fontSize: 16.sp),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Age Preference", style: TextStyle(fontSize: 16.sp)),
+                      Text(
+                        "${ageRange.start.round()} - ${ageRange.end.round()}",
+                        style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -311,26 +320,16 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   values: ageRange,
                   min: 18,
                   max: 60,
-                  divisions: 42,
                   labels: RangeLabels(
                     '${ageRange.start.round()}',
                     '${ageRange.end.round()}',
                   ),
-                  activeColor: const Color(0xFFD30579),
-                  inactiveColor: const Color(0xFFD30579).withOpacity(0.3),
-                  onChanged: (RangeValues values) {
-                    setState(() {
-                      ageRange = values;
-                    });
-                  },
-                ),
-                Text(
-                  'Preferred age: ${ageRange.start.round()} - ${ageRange.end.round()}',
-                  style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
+                  activeColor: Colors.red,
+                  inactiveColor: Colors.red.withOpacity(0.3),
+                  onChanged:
+                      (RangeValues values) => setState(() => ageRange = values),
                 ),
                 SizedBox(height: 16.h),
-
-                // Banned Nationalities
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -339,47 +338,52 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   ),
                 ),
                 SizedBox(height: 8.h),
-                Wrap(
-                  spacing: 8.w,
-                  runSpacing: 6.h,
-                  children: [
-                    ...bannedNationalities.map((country) {
-                      return Chip(
-                        label: Text(
-                          country,
-                          style: const TextStyle(
-                            color: Color(0xFFD30579),
-                            fontWeight: FontWeight.w500,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Wrap(
+                    alignment:
+                        WrapAlignment
+                            .start, // ensures chips start from the left
+                    spacing: 8.w,
+                    runSpacing: 6.h,
+                    children: [
+                      ...bannedNationalities.map((country) {
+                        return Chip(
+                          label: Text(
+                            country,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.r),
+                            side: const BorderSide(color: Colors.red),
+                          ),
+                          deleteIcon: const Icon(
+                            Icons.close,
+                            color: Colors.red,
+                          ),
+                          onDeleted: () => _removeNationality(country),
+                        );
+                      }),
+                      GestureDetector(
+                        onTap: _showCountryPickerDialog,
+                        child: Chip(
+                          label: const Icon(Icons.add, color: Colors.red),
+                          backgroundColor: Colors.white,
+                          shape: const CircleBorder(
+                            side: BorderSide(color: Colors.red, width: 1),
+                          ),
+                          padding: EdgeInsets.all(5.r),
                         ),
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.r),
-                          side: const BorderSide(color: Color(0xFFD30579)),
-                        ),
-                        deleteIcon: const Icon(
-                          Icons.close,
-                          color: Color(0xFFD30579),
-                        ),
-                        onDeleted: () => _removeNationality(country),
-                      );
-                    }),
-                    GestureDetector(
-                      onTap: _showCountryPickerDialog,
-                      child: Chip(
-                        label: const Icon(Icons.add, color: Color(0xFFD30579)),
-                        backgroundColor: Colors.white,
-                        shape: const CircleBorder(
-                          side: BorderSide(color: Color(0xFFD30579), width: 1),
-                        ),
-                        padding: EdgeInsets.all(5.r),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 SizedBox(height: 48.h),
 
-                // Next Button
                 TextWidgetButton(text: 'Next', onPressed: _handleNext),
                 SizedBox(height: 24.h),
               ],
