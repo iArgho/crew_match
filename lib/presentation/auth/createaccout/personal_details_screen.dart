@@ -1,6 +1,8 @@
+import 'package:crew_match/presentation/auth/createaccout/signup_screen.dart';
 import 'package:crew_match/presentation/auth/createaccout/upload_photos_screen.dart';
 import 'package:crew_match/presentation/widget/country_picker_dialog_widget.dart';
 import 'package:crew_match/presentation/widget/date_picker_form_field.dart';
+import 'package:crew_match/presentation/widget/nationality_picker_widgets.dart';
 import 'package:crew_match/presentation/widget/text_widget_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,6 +22,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
 
   String? selectedCompany;
   String? selectedShip;
+  String? selectedNationality;
   String selectedGender = '';
   String selectedGenderPreference = '';
   RangeValues ageRange = const RangeValues(25, 35);
@@ -80,6 +83,12 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
         );
         return;
       }
+      if (selectedNationality == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select a nationality')),
+        );
+        return;
+      }
       Get.off(() => const UploadPhotosScreen());
     }
   }
@@ -113,31 +122,40 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(color: Colors.black),
+        leading: BackButton(
+          color: Colors.black,
+          onPressed: () {
+            Get.off(SignupScreen());
+          },
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      resizeToAvoidBottomInset: true,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
+                SizedBox(height: 26.h),
                 Text(
                   "Personal Details",
                   style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 SizedBox(height: 4.h),
                 Text(
                   "Congratulations! You have successfully created your account. Please provide your personal details to find your best match.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 SizedBox(height: 24.h),
 
@@ -146,7 +164,10 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Date of Birth",
-                    style: TextStyle(fontSize: 16.sp),
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -163,21 +184,27 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 /// Gender
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Gender", style: TextStyle(fontSize: 16.sp)),
+                  child: Text(
+                    "Gender",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 8.h),
                 Row(
                   children:
                       ['Male', 'Female'].map((option) {
                         return Row(
-                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Radio<String>(
-                              value: option,
-                              groupValue: selectedGender,
-                              onChanged:
-                                  (value) =>
-                                      setState(() => selectedGender = value!),
+                            Checkbox(
+                              value: selectedGender == option,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedGender = value! ? option : '';
+                                });
+                              },
                             ),
                             Text(option, style: TextStyle(fontSize: 14.sp)),
                             SizedBox(width: 12.w),
@@ -190,7 +217,13 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 /// Short Bio
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Short Bio", style: TextStyle(fontSize: 16.sp)),
+                  child: Text(
+                    "Short Bio",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 8.h),
                 TextFormField(
@@ -205,12 +238,64 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
                 SizedBox(height: 16.h),
 
+                /// Nationality
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Nationality",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                FormField<String>(
+                  validator:
+                      (value) =>
+                          selectedNationality == null
+                              ? 'Please select a nationality'
+                              : null,
+                  builder: (FormFieldState<String> state) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        NationalityPickerWidget(
+                          allCountries: allCountries,
+                          selectedNationality: selectedNationality,
+                          onSelected: (value) {
+                            setState(() {
+                              selectedNationality = value;
+                              state.didChange(value);
+                            });
+                          },
+                        ),
+                        if (state.hasError)
+                          Padding(
+                            padding: EdgeInsets.only(top: 4.h, left: 12.w),
+                            child: Text(
+                              state.errorText!,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 12.sp,
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
+                SizedBox(height: 16.h),
+
                 /// Company Name
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Company Name",
-                    style: TextStyle(fontSize: 16.sp),
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -243,7 +328,13 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 /// Ship Name
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Ship Name", style: TextStyle(fontSize: 16.sp)),
+                  child: Text(
+                    "Ship Name",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 8.h),
                 DropdownButtonFormField<String>(
@@ -271,11 +362,15 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 ),
                 SizedBox(height: 16.h),
 
+                /// Gender Preference
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Gender Preference",
-                    style: TextStyle(fontSize: 16.sp),
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -283,15 +378,15 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   children:
                       ['Male', 'Female', 'Both'].map((option) {
                         return Row(
-                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Radio<String>(
-                              value: option,
-                              groupValue: selectedGenderPreference,
-                              onChanged:
-                                  (value) => setState(
-                                    () => selectedGenderPreference = value!,
-                                  ),
+                            Checkbox(
+                              value: selectedGenderPreference == option,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedGenderPreference =
+                                      value! ? option : '';
+                                });
+                              },
                             ),
                             Text(option, style: TextStyle(fontSize: 14.sp)),
                             SizedBox(width: 12.w),
@@ -307,10 +402,20 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Age Preference", style: TextStyle(fontSize: 16.sp)),
+                      Text(
+                        "Age Preference",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                       Text(
                         "${ageRange.start.round()} - ${ageRange.end.round()}",
-                        style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),
@@ -325,25 +430,28 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                     '${ageRange.end.round()}',
                   ),
                   activeColor: Colors.red,
-                  inactiveColor: Colors.red.withOpacity(0.3),
+                  inactiveColor: Colors.grey.withOpacity(0.3),
                   onChanged:
                       (RangeValues values) => setState(() => ageRange = values),
                 ),
                 SizedBox(height: 16.h),
+
+                /// Banned Nationalities
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Banned Nationalities",
-                    style: TextStyle(fontSize: 16.sp),
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 SizedBox(height: 8.h),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Wrap(
-                    alignment:
-                        WrapAlignment
-                            .start, // ensures chips start from the left
+                    alignment: WrapAlignment.start,
                     spacing: 8.w,
                     runSpacing: 6.h,
                     children: [
@@ -385,7 +493,7 @@ class _PersonalDetailsScreenState extends State<PersonalDetailsScreen> {
                 SizedBox(height: 48.h),
 
                 TextWidgetButton(text: 'Next', onPressed: _handleNext),
-                SizedBox(height: 24.h),
+                SizedBox(height: 48.h),
               ],
             ),
           ),

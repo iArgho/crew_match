@@ -26,37 +26,39 @@ class PrivacyPolicyScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
+            SizedBox(height: 40.h),
             Text(
-              "1. What data we collect?",
+              "1 . What type of data we collect?",
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.sp,
+                fontWeight: FontWeight.w700,
+                fontSize: 20.sp,
                 color: Colors.black,
               ),
             ),
             SizedBox(height: 8.h),
             Text(
-              "• Personal details: Name, phone number, email\n• Profile data: Photos, preferences, bio\n• Activity data: Likes, messages, views",
-              style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade800),
+              "Lorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue. Ultrices pharetra ornare nam faucibus. Integer id varius consectetur non.Lorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue.",
+              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 24.h),
             Text(
-              "2. Why we collect data?",
+              "2 . What type of data we collect?",
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.sp,
+                fontWeight: FontWeight.w700,
+                fontSize: 20.sp,
                 color: Colors.black,
               ),
             ),
             SizedBox(height: 8.h),
             Text(
-              "• To personalize matches\n• To improve features\n• To notify updates",
-              style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade800),
+              "Lorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue. Ultrices pharetra ornare nam faucibus. Integer id varius consectetur non.Lorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue.",
+              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
             ),
+            SizedBox(height: 24.h),
           ],
         ),
       ),

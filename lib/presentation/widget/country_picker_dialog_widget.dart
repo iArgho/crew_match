@@ -18,7 +18,6 @@ class CountryPickerDialogWidget extends StatefulWidget {
       _CountryPickerDialogWidgetState();
 }
 
-// Country name → ISO Alpha-2 Code
 const Map<String, String> countryCodeMap = {
   'Bangladesh': 'bd',
   'India': 'in',
@@ -33,19 +32,18 @@ const Map<String, String> countryCodeMap = {
 
 class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
   final TextEditingController _searchController = TextEditingController();
-  List<String> _filteredCountries = [];
+  late List<String> _filteredCountries;
   final Set<String> _selectedCountries = {};
 
   @override
   void initState() {
     super.initState();
-    _filteredCountries = List.from(widget.allCountries);
+    _filteredCountries = widget.allCountries;
     _searchController.addListener(_onSearchChanged);
   }
 
   @override
   void dispose() {
-    _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();
   }
@@ -66,50 +64,22 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
   void _toggleSelection(String country) {
     if (widget.bannedNationalities.contains(country)) return;
     setState(() {
-      if (_selectedCountries.contains(country)) {
-        _selectedCountries.remove(country);
-      } else {
-        _selectedCountries.add(country);
-      }
+      _selectedCountries.contains(country)
+          ? _selectedCountries.remove(country)
+          : _selectedCountries.add(country);
     });
   }
 
-  String getFlagEmoji(String countryName) {
-    final code = countryCodeMap[countryName]?.toUpperCase() ?? '';
+  String _getFlagEmoji(String country) {
+    final code = countryCodeMap[country]?.toUpperCase() ?? '';
     return String.fromCharCodes(code.codeUnits.map((c) => 0x1F1E6 - 65 + c));
-  }
-
-  InputDecoration _inputDecoration(String hint) {
-    return InputDecoration(
-      hintText: hint,
-      filled: true,
-      fillColor: Colors.white,
-      contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5.r),
-        borderSide: const BorderSide(color: Colors.red),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5.r),
-        borderSide: const BorderSide(color: Colors.red, width: 2),
-      ),
-      hintStyle: TextStyle(fontSize: 14.sp, color: Colors.red),
-      prefixIcon: const Icon(Icons.search, color: Colors.red),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-      title: Text(
-        'Select Countries',
-        style: TextStyle(
-          fontSize: 18.sp,
-          fontWeight: FontWeight.w600,
-          color: Colors.red,
-        ),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+      contentPadding: EdgeInsets.all(16.w),
       content: SizedBox(
         width: double.maxFinite,
         child: Column(
@@ -117,19 +87,36 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
           children: [
             TextField(
               controller: _searchController,
-              decoration: _inputDecoration('Search country'),
-              style: TextStyle(color: Colors.red),
+              decoration: InputDecoration(
+                hintText: 'Search country',
+                prefixIcon: Icon(
+                  Icons.search,
+                  size: 20.sp,
+                  color: Colors.black,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.r),
+                  borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 12.w,
+                  vertical: 12.h,
+                ),
+                hintStyle: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.black.withOpacity(0.7),
+                ),
+              ),
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: 8.h),
             SizedBox(
-              height: 250.h,
-              width: double.maxFinite,
+              height: 200.h,
               child:
                   _filteredCountries.isEmpty
                       ? Center(
                         child: Text(
                           'No countries found',
-                          style: TextStyle(fontSize: 14.sp, color: Colors.red),
+                          style: TextStyle(fontSize: 14.sp),
                         ),
                       )
                       : ListView.builder(
@@ -142,57 +129,44 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
                           final isSelected = _selectedCountries.contains(
                             country,
                           );
-                          return Material(
-                            color:
-                                isSelected
-                                    ? Colors.red.withOpacity(0.1)
-                                    : Colors.transparent,
-                            borderRadius: BorderRadius.circular(5.r),
-                            child: ListTile(
-                              title: Row(
-                                children: [
-                                  Text(
-                                    getFlagEmoji(country),
-                                    style: TextStyle(
-                                      fontSize: 16.sp,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8.w),
-                                  Text(
-                                    country,
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              trailing: Icon(
-                                isBanned
-                                    ? Icons.block
-                                    : isSelected
-                                    ? Icons.check_box
-                                    : Icons.check_box_outline_blank,
-                                color:
-                                    isBanned
-                                        ? Colors.grey
-                                        : isSelected
-                                        ? Colors.red
-                                        : Colors.red,
-                              ),
-                              onTap:
-                                  isBanned
-                                      ? null
-                                      : () => _toggleSelection(country),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.r),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 12.w,
-                                vertical: 4.h,
-                              ),
+                          return ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 2.h,
                             ),
+                            leading: Text(
+                              _getFlagEmoji(country),
+                              style: TextStyle(fontSize: 16.sp),
+                            ),
+                            title: Text(
+                              country,
+                              style: TextStyle(fontSize: 14.sp),
+                            ),
+                            trailing:
+                                isBanned
+                                    ? Icon(
+                                      Icons.block,
+                                      size: 18.sp,
+                                      color: Colors.white,
+                                    )
+                                    : isSelected
+                                    ? Icon(
+                                      Icons.done,
+                                      size: 18.sp,
+                                      color: Colors.black,
+                                    )
+                                    : SizedBox(width: 18.sp),
+                            onTap:
+                                isBanned
+                                    ? null
+                                    : () => _toggleSelection(country),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            tileColor:
+                                isSelected
+                                    ? Colors.grey.withOpacity(0.0)
+                                    : null,
                           );
                         },
                       ),
@@ -205,25 +179,25 @@ class _CountryPickerDialogWidgetState extends State<CountryPickerDialogWidget> {
           onPressed: () => Navigator.pop(context),
           child: Text(
             'Cancel',
-            style: TextStyle(fontSize: 14.sp, color: Colors.red),
+            style: TextStyle(fontSize: 14.sp, color: Colors.black),
           ),
         ),
         ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.red,
-            disabledBackgroundColor: Colors.red.withOpacity(0.3),
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5.r),
-            ),
-          ),
           onPressed:
               _selectedCountries.isEmpty
                   ? null
                   : () {
-                    Navigator.pop(context);
                     widget.onCountriesSelected(_selectedCountries.toList());
+                    Navigator.pop(context);
                   },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          ),
           child: Text(
             'Done',
             style: TextStyle(fontSize: 14.sp, color: Colors.white),

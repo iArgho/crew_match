@@ -20,7 +20,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   void _handleResetPassword() {
     if (_formKey.currentState?.validate() ?? false) {
-      // You can add more logic here like calling API or Firebase to reset password
       print("Password reset to: ${_newPasswordController.text}");
       Get.offAll(() => const SigninScreen());
     }
@@ -41,9 +40,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Get.off(() => const OtpVerificationScreen());
-          },
+          onPressed: () => Get.off(() => const OtpVerificationScreen()),
         ),
       ),
       body: Padding(
@@ -54,10 +51,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 32.h),
+                SizedBox(height: 40.h),
                 Text(
                   'Reset Your Password',
-                  style: textTheme.titleLarge?.copyWith(
+                  style: textTheme.titleMedium?.copyWith(
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -65,11 +63,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 Text(
                   'Please enter your new password below.',
                   style: textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey[700],
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey,
                   ),
                 ),
                 SizedBox(height: 32.h),
-                Text('New Password', style: textTheme.titleSmall),
+                Text(
+                  'New Password',
+                  style: textTheme.labelLarge?.copyWith(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 SizedBox(height: 8.h),
                 TextFormField(
                   controller: _newPasswordController,
@@ -91,7 +97,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   },
                 ),
                 SizedBox(height: 24.h),
-                Text('Confirm Password', style: textTheme.titleSmall),
+                Text(
+                  'Confirm Password',
+                  style: textTheme.labelLarge?.copyWith(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 SizedBox(height: 8.h),
                 TextFormField(
                   controller: _confirmPasswordController,
@@ -112,17 +124,16 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 40.h),
+                SizedBox(height: 80.h),
                 Text(
                   '*NOTE: Choose a password that is distinctive & you can easily remember.',
-                  style: textTheme.bodySmall,
+                  style: textTheme.bodySmall?.copyWith(color: Colors.grey),
                 ),
-                SizedBox(height: 32.h),
+                SizedBox(height: 48.h),
                 TextWidgetButton(
                   text: 'Reset Password',
                   onPressed: _handleResetPassword,
                 ),
-                SizedBox(height: 32.h),
               ],
             ),
           ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -150,7 +151,12 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                       shape: BoxShape.circle,
                       color: Colors.pink[400],
                     ),
-                    child: const Icon(Icons.add, size: 24, color: Colors.white),
+                    child: SvgPicture.asset(
+                      'assets/icons/plus.svg',
+                      width: 18.r,
+                      height: 18.r,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),

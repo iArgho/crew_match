@@ -1,7 +1,7 @@
 name: crew_match
 description: "A new Flutter project."
 
-publish_to: 'none' 
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
@@ -10,7 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.2.0
   get: ^4.7.2
@@ -20,13 +19,34 @@ dependencies:
   carousel_slider: ^5.1.1
   image_picker: ^1.1.2
   permission_handler: ^12.0.0+1
+  cached_network_image: ^3.4.1
+  tcard: ^1.3.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
 
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/launcher_logo.png"
+  adaptive_icon_background: "#9A79F5"
+  adaptive_icon_foreground: "assets/images/launcher_foreground.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/images/launcher_foreground.png"
+    background_color: "#9A79F5"
+    theme_color: "#9A79F5"
+  windows:
+    generate: true
+    image_path: "assets/images/launcher_foreground.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/images/launcher_foreground.png"
 
 flutter:
   uses-material-design: true
@@ -34,6 +54,25 @@ flutter:
   assets:
     - assets/icons/logo_Color.svg
     - assets/icons/logo_bland.svg
+    - assets/icons/avatar.svg
+    - assets/icons/home.svg
+    - assets/icons/message.svg
+    - assets/icons/user-switch.svg
+    - assets/icons/account.svg
+    - assets/icons/logout.svg
+    - assets/icons/privecy.svg
+    - assets/icons/setting.svg
+    - assets/icons/Subscribtion.svg
+    - assets/icons/plus.svg
+    - assets/icons/Bell.svg
+    - assets/icons/privecy 2.svg
+    - assets/icons/delete.svg
+    - assets/icons/terms and service.svg
+    - assets/icons/about.svg
+    - assets/icons/changepass.svg
+    - assets/icons/changepass.svg
+    - assets/icons/cross.svg
+    - assets/icons/heart.svg
 
   fonts:
     - family: manrope

@@ -11,15 +11,17 @@ class NotificationScreen extends StatelessWidget {
         'subtitle': 'Your profile matched with Emma',
         'time': '10 min ago',
       },
-      {
-        'title': 'Message Received',
-        'subtitle': 'Liam sent you a message',
-        'time': '1 hr ago',
-      },
+
       {
         'title': 'You have got a new match!',
         'subtitle': 'Mia checked your profile',
         'time': '2 hrs ago',
+      },
+
+      {
+        'title': 'You have got a new match!',
+        'subtitle': 'GiGi checked your profile',
+        'time': '4 hrs ago',
       },
     ];
 
@@ -44,7 +46,7 @@ class NotificationScreen extends StatelessWidget {
                   height: 50,
                   alignment: Alignment.center,
                   decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 222, 222, 222),
+                    color: Color.fromARGB(255, 241, 241, 241),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(

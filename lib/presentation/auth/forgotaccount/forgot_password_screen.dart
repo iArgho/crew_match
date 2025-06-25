@@ -47,7 +47,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 32.h),
+                SizedBox(height: 40.h),
                 Text(
                   'Forgot Your Password?',
                   style: TextStyle(
@@ -58,10 +58,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 SizedBox(height: 8.h),
                 Text(
                   'Please enter your registered Email & we will send an OTP code to reset your password.',
-                  style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey,
+                  ),
                 ),
-                SizedBox(height: 32.h),
-                Text('Email', style: TextStyle(fontSize: 16.sp)),
+                SizedBox(height: 48.h),
+                Text(
+                  'Email',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 SizedBox(height: 8.h),
                 TextFormField(
                   controller: _emailController,
@@ -83,7 +93,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 104.h),
+                SizedBox(height: 112.h),
                 TextWidgetButton(text: 'Get OTP', onPressed: _handleGetOtp),
               ],
             ),

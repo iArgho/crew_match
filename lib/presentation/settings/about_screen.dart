@@ -29,48 +29,37 @@ class AboutScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
         child: ListView(
           physics: const BouncingScrollPhysics(),
+
           children: [
+            SizedBox(height: 40.h),
             Text(
-              "1. What type of data we collect?",
+              "1 . What type of data we collect?",
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.sp,
+                fontWeight: FontWeight.w700,
+                fontSize: 20.sp,
                 color: Colors.black,
               ),
             ),
             SizedBox(height: 8.h),
             Text(
-              "Lorem ipsum dolor sit amet...",
-              style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade800),
+              "Lorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue. Ultrices pharetra ornare nam faucibus. Integer id varius consectetur non.Lorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue.",
+              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 24.h),
             Text(
-              "2. Why we collect data?",
+              "2 . What type of data we collect?",
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.sp,
+                fontWeight: FontWeight.w700,
+                fontSize: 20.sp,
                 color: Colors.black,
               ),
             ),
             SizedBox(height: 8.h),
             Text(
-              "Lorem ipsum dolor sit amet...",
-              style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade800),
+              "Lorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue. Ultrices pharetra ornare nam faucibus. Integer id varius consectetur non.Lorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue.",
+              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
             ),
-            SizedBox(height: 16.h),
-            Text(
-              "3. How we use your data?",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.sp,
-                color: Colors.black,
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              "Lorem ipsum dolor sit amet...",
-              style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade800),
-            ),
+            SizedBox(height: 24.h),
           ],
         ),
       ),

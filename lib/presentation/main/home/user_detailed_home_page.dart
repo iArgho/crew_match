@@ -97,18 +97,6 @@ class UserDetailedHomePage extends StatelessWidget {
                             offset: Offset(0, 0),
                             child: Row(
                               children: [
-                                Container(
-                                  padding: EdgeInsets.all(2.w),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    Icons.clear,
-                                    color: Colors.red,
-                                    size: 35.sp,
-                                  ),
-                                ),
                                 SizedBox(width: 12.w),
                                 GestureDetector(
                                   onTap: () {
@@ -195,10 +183,7 @@ class UserDetailedHomePage extends StatelessWidget {
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(
-          color: Colors.grey.withOpacity(0.2), // subtle grey border
-          width: 1.5,
-        ),
+        border: Border.all(color: Colors.grey.withOpacity(0.2), width: 1.5),
       ),
       child: Text(content, style: _bodyStyle),
     );

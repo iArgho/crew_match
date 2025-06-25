@@ -78,13 +78,13 @@ class _SignupScreenState extends State<SignupScreen> {
             key: _formKey,
             child: Column(
               children: [
-                SizedBox(height: 64.h),
+                SizedBox(height: 99.h),
                 SvgPicture.asset(
                   PathUtils.logoColor,
                   width: 0.7.sw,
                   semanticsLabel: 'App Logo',
                 ),
-                SizedBox(height: 24.h),
+                SizedBox(height: 20.h),
                 Text(
                   "Create Account",
                   style: TextStyle(
@@ -95,14 +95,19 @@ class _SignupScreenState extends State<SignupScreen> {
                 SizedBox(height: 4.h),
                 Text(
                   "Fill the information to create a new account.",
-                  style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                  style: TextStyle(fontSize: 16.sp, color: Colors.grey),
                 ),
-                SizedBox(height: 24.h),
+                SizedBox(height: 36.h),
 
-                // Name
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Name", style: TextStyle(fontSize: 16.sp)),
+                  child: Text(
+                    "Name",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 8.h),
                 TextFormField(
@@ -121,7 +126,13 @@ class _SignupScreenState extends State<SignupScreen> {
                 // Email
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Email", style: TextStyle(fontSize: 16.sp)),
+                  child: Text(
+                    "Email",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 8.h),
                 TextFormField(
@@ -142,7 +153,13 @@ class _SignupScreenState extends State<SignupScreen> {
                 // Password
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Password", style: TextStyle(fontSize: 16.sp)),
+                  child: Text(
+                    "Password",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 8.h),
                 TextFormField(
@@ -178,7 +195,10 @@ class _SignupScreenState extends State<SignupScreen> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Confirm Password",
-                    style: TextStyle(fontSize: 16.sp),
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -210,12 +230,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
                 SizedBox(height: 48.h),
 
-                // Sign Up Button
                 TextWidgetButton(text: 'Sign Up', onPressed: _handleSignUp),
 
-                SizedBox(height: 24.h),
-
-                // Already have account
+                SizedBox(height: 12.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -229,8 +246,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ],
                 ),
-
-                SizedBox(height: 24.h),
+                SizedBox(height: 170.h),
               ],
             ),
           ),

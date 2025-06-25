@@ -1,4 +1,5 @@
 import 'package:crew_match/presentation/auth/signin/signin_screen.dart';
+import 'package:crew_match/presentation/main/main_screen.dart';
 import 'package:crew_match/utility/parth_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Center(
             child: SvgPicture.asset(
               PathUtils.logoBland,
-              width: .7.sw,
+              width: .6.sw,
               semanticsLabel: 'App Logo',
             ),
           ),
